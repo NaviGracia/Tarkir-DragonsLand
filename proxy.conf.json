@@ -1,0 +1,7 @@
+{
+    "/api": {
+        "target": "https://snap.fan",
+        "secure": false,
+        "changeOrigin": true
+    }
+}

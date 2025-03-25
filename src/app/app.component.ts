@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { NavbarComponent } from "./shared/components/navbar/navbar.component";
+import { CardsGalleryComponent } from "./cards/pages/cards-gallery/cards-gallery.component";
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [ NavbarComponent, CardsGalleryComponent],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'SnapVault';
