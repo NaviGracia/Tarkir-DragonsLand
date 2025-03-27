@@ -1,53 +1,23 @@
+import { ColorIdentity, Legalities, MagicAbilities, PurchaseUrls, Rarity, Watermark } from "./raw-card.interfaces";
+
 export interface Card{
   name: string;
-  imageUrl: string | undefined,
-  power: number;
-  cost: number;
-  description: string,
-  variants: Variant[];
-  abilities: Ability[];
-  serie: SeriesDefKey;
+  pngUrl: string;
+  manaCost: string;
+  type: string;
+  power?: string;
+  toughness?: string;
+  effect?: string;
+  loyalty?: string;
+  colors: ColorIdentity[];
+  colorIdentity: ColorIdentity[];
+  skills: MagicAbilities[];
+  producedMana?: ColorIdentity[];
+  legalities: Legalities;
+  rarity: Rarity;
+  artist: string;
+  prices: { [key: string]: null | string };
+  purchaseUrl: PurchaseUrls;
+  clan?: Watermark;
 }
 
-export interface Variant{
-  vname: string;
-  card: string;
-  rarity: ArtVariantRarityDefKey | null;
-  source: ArtVariantSourceDefKey | null;
-  imageUrl: string;
-}
-
-export interface Ability{
-  id: number;
-  name: string;
-  description: null | string;
-}
-
-export enum ArtVariantRarityDefKey {
-  Rare = "Rare",
-  Spotlight = "Spotlight",
-  SuperRare = "SuperRare",
-  Ultimate = "Ultimate",
-}
-
-export enum ArtVariantSourceDefKey {
-  Album = "Album",
-  Bundle = "Bundle",
-  ConquestShop = "ConquestShop",
-  GeneralPool = "GeneralPool",
-  Promo = "Promo",
-  SeasonPass = "SeasonPass",
-  SpotlightCache = "SpotlightCache",
-  TokenShop = "TokenShop",
-}
-
-export enum SeriesDefKey {
-  Recruit = "Recruit",
-  SeasonPass = "SeasonPass",
-  Series1 = "Series1",
-  Series2 = "Series2",
-  Series3 = "Series3",
-  Series4 = "Series4",
-  Series5 = "Series5",
-  Starter = "Starter",
-}

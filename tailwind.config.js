@@ -9,4 +9,14 @@ module.exports = {
   plugins: [
     require('daisyui'),
   ],
+  daisyui: {
+    themes: [
+      "dark",
+      "corporate",
+      "synthwave",
+      "forest",
+      "dracula",
+      "autumn",
+    ],
+  },
 }
