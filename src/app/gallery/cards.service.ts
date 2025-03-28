@@ -1,9 +1,10 @@
 import { inject, Injectable, signal } from '@angular/core';
-import { environment } from '../../environments/environment';
+
 import { HttpClient } from '@angular/common/http';
 import { Card } from './interfaces/card.interface';
 import { RawCardResponse } from './interfaces/raw-card.interfaces';
 import { CardMapper } from './mapper/card.mapper';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'

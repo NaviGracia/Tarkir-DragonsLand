@@ -1,25 +1,19 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './shared/pages/home/home.component';
-import { CardsGalleryComponent } from './cards/pages/cards-gallery/cards-gallery.component';
 import { DecksComponent } from './decks/pages/decks/decks.component';
-import { CharacterComponent } from './characters/pages/character/character.component';
+import { CardsGalleryComponent } from './gallery/pages/cards-gallery/cards-gallery.component';
 
 export const routes: Routes = [
   {
-    path: 'home',
-    component: HomeComponent,
+    path: 'clans',
+    loadChildren: () => import('./clans/clans.routes'),
   },
   {
-    path: 'cards-gallery',
-    component: CardsGalleryComponent,
-  },
-  {
-    path: 'decks-gallery',
+    path: 'battlefield',
     component: DecksComponent,
   },
   {
-    path: 'character/:name',
-    component: CharacterComponent,
+    path: 'bestiary',
+    component: CardsGalleryComponent,
   },
   /* {
     path: ,
@@ -27,6 +21,6 @@ export const routes: Routes = [
   }, */
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: 'clans',
   },
 ];

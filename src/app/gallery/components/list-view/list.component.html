@@ -1,5 +1,5 @@
 <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-8 gap-4">
-  @for (card of this.cardsService.cards(); track card) {
+  @for (card of this.cardsService.cards() | cardFilter: searchParams() ; track card) {
     <card-item [card]="card"/>
   }
 </div>

@@ -1,13 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { NavbarComponent } from "./shared/components/navbar/navbar.component";
-import { CardsGalleryComponent } from "./cards/pages/cards-gallery/cards-gallery.component";
-import { HttpClient } from '@angular/common/http';
+import { RouterOutlet } from '@angular/router';
+import { ThemeService } from './shared/services/theme.service';
 
 @Component({
   selector: 'app-root',
-  imports: [ NavbarComponent, CardsGalleryComponent],
+  imports: [NavbarComponent, RouterOutlet],
   templateUrl: './app.component.html',
 })
 export class AppComponent {
-  title = 'SnapVault';
+  actualTheme = inject(ThemeService);
 }

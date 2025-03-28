@@ -1,7 +1,13 @@
 
-<h1 class="text-white text-center pt-2 font-medium text-3xl">J.A.R.V.I.S</h1>
+<h1 class="text-white text-center pt-2 font-medium text-3xl">Bestiary</h1>
 
 <div class="flex items-center justify-center py-4 md:py-8 flex-wrap">
+  <input
+      type="text"
+      class="input input-bordered w-full max-w-xs"
+      placeholder="Buscar Carta"
+      (input)="searchQuery.set(txtSearch.value)"
+      #txtSearch/>
   <button
     type="button"
     class="focus:ring-4 focus:outline-none rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800"
@@ -9,7 +15,7 @@
   <button
     type="button"
     class="focus:ring-4 focus:outline-none rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800"
-  >Pool 2</button>
+  ></button>
   <button
     type="button"
     class="focus:ring-4 focus:outline-none rounded-full text-base font-medium px-5 py-2.5 text-center me-3 mb-3 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:bg-gray-900 dark:focus:ring-blue-800"
@@ -24,5 +30,5 @@
   >Pool 5</button>
 </div>
 
-<cards-list/>
+<cards-list [searchParams]="searchQuery()"/>
 
