@@ -1,0 +1,24 @@
+<div class="mx-0.5 mb-4 grid justify-center">
+    <div class="card card-compact bg-accent h-96 w-56 shadow-xl object-cover transition-transform duration-300 sm:hover:scale-105">
+      <figure>
+        <img
+          class="h-auto w-40 sm:ml-0 sm:max-w-full rounded-lg mt-5"
+          routerLink='${card.id}'
+          [src]="card().pngUrl"
+          [alt]="card().name">
+      </figure>
+      <div class="card-body grid justify-center">
+        <h2 class="card-title text-sm text-primary justify-center text-center">{{ card().name  }}</h2>
+        <div class="card-actions justify-center">
+          <button
+            class="btn btn-primary"
+            routerLink='${card.id}'
+          >Details</button>
+          <a
+            class="btn btn-neutral"
+            [href]="card().purchaseUrl.cardmarket"
+          >Buy</a>
+        </div>
+      </div>
+    </div>
+</div>

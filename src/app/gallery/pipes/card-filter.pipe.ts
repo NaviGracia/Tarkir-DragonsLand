@@ -1,5 +1,5 @@
 import { Pipe, type PipeTransform } from '@angular/core';
-import { Card } from '../interfaces/card.interface';
+import { Card } from '../../shared/interfaces/card.interface';
 
 @Pipe({
   name: 'cardFilter',
@@ -11,9 +11,12 @@ export class CardFilterPipe implements PipeTransform {
 
     search = search.toLowerCase();
 
-    return value.filter(
+    const a = value.filter(
       card => card.name.toLowerCase().includes(search)
     )
+    console.log(a);
+
+    return a;
   }
 
 }

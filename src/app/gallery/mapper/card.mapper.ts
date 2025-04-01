@@ -1,5 +1,5 @@
-import { Card } from "../interfaces/card.interface";
-import { RawCard } from "../interfaces/raw-card.interfaces";
+import { Card } from "../../shared/interfaces/card.interface";
+import { RawCard } from "../../shared/interfaces/raw-card.interfaces";
 
 
 export class CardMapper {
@@ -9,6 +9,7 @@ export class CardMapper {
 
   static mapRawCardToCard( card: RawCard ): Card{
     return{
+      id: card.id,
       name: card.name,
       pngUrl: card.image_uris.png,
       manaCost: card.mana_cost,

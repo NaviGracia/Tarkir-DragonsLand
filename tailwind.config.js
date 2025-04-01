@@ -11,7 +11,6 @@ module.exports = {
   ],
   daisyui: {
     themes: [
-      "dark",
       "corporate",
       "synthwave",
       "forest",

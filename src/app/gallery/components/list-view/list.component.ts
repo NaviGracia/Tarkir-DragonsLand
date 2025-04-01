@@ -1,7 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { CardsService } from '../../cards.service';
-import { ItemComponent } from "../item/item.component";
 import { CardFilterPipe } from '../../pipes/card-filter.pipe';
+import { ItemComponent } from './item/item.component';
 
 @Component({
   selector: 'cards-list',
@@ -12,6 +12,4 @@ export class ListComponent {
   cardsService = inject(CardsService);
 
   searchParams = input.required<string>();
-
-
 }

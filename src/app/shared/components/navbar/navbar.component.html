@@ -21,7 +21,7 @@
         <li>
           <a
             class="btn"
-            routerLink=""
+            routerLink="clans"
             routerLinkActive="btn-primary">
             Dragon's Cave (Home)
           </a>
@@ -45,8 +45,8 @@
       </ul>
     </div>
     <a
-      class="btn btn-ghost text-xl"
-      routerLink=""
+      class="btn btn-ghost text-primary text-xl"
+      routerLink="/clans"
     >Tarkir: Dragon's Land</a>
   </div>
 
@@ -55,7 +55,7 @@
     <ul class="menu menu-horizontal px-1">
       <li>
         <a
-          class="btn"
+          class="btn mr-3"
           routerLink="clans"
           routerLinkActive="btn-primary">
           Clans
@@ -63,7 +63,7 @@
       </li>
       <li>
         <a
-          class="btn"
+          class="btn mr-3"
           routerLink="battlefield"
           routerLinkActive="btn-primary">
           Battlefield (Decks)
@@ -71,7 +71,7 @@
       </li>
       <li>
         <a
-          class="btn"
+          class="btn mr-3"
           routerLink="bestiary"
           routerLinkActive="btn-primary">
           Bestiary (Card Gallery)
@@ -80,6 +80,22 @@
     </ul>
   </div>
   <div class="navbar-end">
-    <a class="btn">The Cave (Customization)</a>
+    <details class="dropdown dropdown-end">
+      <summary tabindex="0" role="button" class="btn m-1" (click)="toggleDropdown()" [class.btn-primary]="isOpen()">Themes</summary>
+      <ul tabindex="0" class="dropdown-content menu bg-base-300 rounded-box z-[1] w-29 p-2 m-1 shadow">
+        @for (clan of clans; track clan) {
+          <li>
+            <a
+            (click)="themeService.changeDataTheme(clan)"
+            >{{ clan | titlecase }}</a>
+          </li>
+        }
+        <li>
+          <a
+          (click)="themeService.saveThemeToLocalStorage()"
+          >Save</a>
+        </li>
+      </ul>
+    </details>
   </div>
 </div>

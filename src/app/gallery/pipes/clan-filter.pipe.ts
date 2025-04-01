@@ -1,5 +1,5 @@
 import { Pipe, type PipeTransform } from '@angular/core';
-import { Card } from '../interfaces/card.interface';
+import { Card } from '../../shared/interfaces/card.interface';
 
 @Pipe({
   name: 'clanFilter',

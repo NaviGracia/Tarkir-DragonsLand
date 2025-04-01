@@ -1,7 +1,7 @@
 <div class="navbar navbar-center justify-center">
   @for (clan of clans; track clan) {
   <button
-    class="btn mr-7"
+    class="btn mr-1 sm:mr-7"
     [routerLink]="clan"
     routerLinkActive="btn-primary"
   >{{ clan | titlecase }}</button>

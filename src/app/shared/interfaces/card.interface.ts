@@ -1,6 +1,7 @@
 import { ColorIdentity, Legalities, MagicAbilities, PurchaseUrls, Rarity, Watermark } from "./raw-card.interfaces";
 
 export interface Card{
+  id: string;
   name: string;
   pngUrl: string;
   manaCost: string;

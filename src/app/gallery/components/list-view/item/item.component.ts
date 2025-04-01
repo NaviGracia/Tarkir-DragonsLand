@@ -1,9 +1,10 @@
 import { Component, input } from '@angular/core';
-import { Card } from '../../interfaces/card.interface';
+import { RouterLink } from '@angular/router';
+import { Card } from '../../../../shared/interfaces/card.interface';
 
 @Component({
   selector: 'card-item',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './item.component.html',
 })
 export class ItemComponent {
