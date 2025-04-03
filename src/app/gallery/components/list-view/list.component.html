@@ -1,5 +1,5 @@
   @if ((this.cardsService.totalCards() | cardFilter: searchParams()).length != 0) {
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
       @for (card of this.cardsService.totalCards() | cardFilter: searchParams() ; track card) {
         <card-item [card]="card"/>
       }

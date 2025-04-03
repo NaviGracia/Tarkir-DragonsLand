@@ -1,0 +1,29 @@
+<footer class="footer footer-center bg-base-200 rounded p-4">
+  <div class="grid grid-cols-3">
+    <nav class="grid grid-flow-col">
+      <a
+        class="link link-hover mr-2"
+        routerLink="clans"
+      >Clans</a>
+      <a
+        class="link link-hover mr-2"
+        routerLink="battlefield"
+      >Battlefield</a>
+      <a
+        class="link link-hover"
+        routerLink="bestiary"
+      >Bestiary</a>
+    </nav>
+    <aside>
+      <p>Copyright © {{date}} - All right reserved by Iván García Torresano</p>
+    </aside>
+    <div class="grid grid-cols-5">
+      @for (clan of clans; track clan) {
+        <button
+          [routerLink]="'clans/' + clan">
+          <img class="bg-white border rounded-full w-10 mr-2" [src]="'/' + clan + '.webp'" [alt]="clan | titlecase">
+        </button>
+      }
+    </div>
+  </div>
+</footer>

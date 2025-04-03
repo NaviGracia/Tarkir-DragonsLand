@@ -1,5 +1,5 @@
 <div class="flex flex-col h-screen">
-  <section [attr.data-theme]="actualTheme.actualTheme()">
+  <section class="sticky top-0 z-50" [attr.data-theme]="actualTheme.actualTheme()">
     <app-navbar/>
   </section>
 
@@ -8,5 +8,9 @@
     [attr.data-theme]="actualTheme.actualTheme()">
     <router-outlet/>
   </main>
+
+  <section class="sticky bottom-0 z-50" [attr.data-theme]="actualTheme.actualTheme()">
+    <app-footer/>
+  </section>
 </div>
 
