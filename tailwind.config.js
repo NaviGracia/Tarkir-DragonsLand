@@ -4,6 +4,9 @@ module.exports = {
     "./src/**/*.{html,ts}",
   ],
   theme: {
+    fontFamily: {
+      'winky': ['Winky', 'sans-serif'],
+    },
     extend: {},
   },
   plugins: [

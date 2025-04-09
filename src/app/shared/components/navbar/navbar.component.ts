@@ -1,13 +1,15 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Watermark } from '../../interfaces/raw-card.interfaces';
-import { ThemeService } from '../../services/theme.service';
-import { TitleCasePipe } from '@angular/common';
+import { TitleCasePipe, UpperCasePipe } from '@angular/common';
+import { ThemeService } from '@shared/services/theme.service';
+import { Watermark } from '@shared/interfaces/raw-card.interfaces';
+
+
 
 
 @Component({
   selector: 'app-navbar',
-  imports: [RouterLink, RouterLinkActive, TitleCasePipe],
+  imports: [RouterLink, RouterLinkActive, UpperCasePipe],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {

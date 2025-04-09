@@ -1,0 +1,10 @@
+<div class="bg-white">
+  <div class="lg:grid lg:grid-cols-[40%_60%]">
+    <div>
+      <filters-menu (hideGallery)="hideGallery.set($event)"/>
+    </div>
+    <div [class.hidden]="hideGallery()">
+      <cards-list [searchParams]="searchQuery()"/>
+    </div>
+  </div>
+</div>

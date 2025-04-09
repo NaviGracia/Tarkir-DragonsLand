@@ -1,5 +1,5 @@
-<footer class="footer footer-center bg-base-200 rounded p-4">
-  <div class="grid grid-cols-3">
+<footer class="footer footer-center bg-base-200 rounded p-4 text-sm">
+  <div class="grid grid-row-2 lg:grid-cols-3">
     <nav class="grid grid-flow-col">
       <a
         class="link link-hover mr-2"
@@ -17,11 +17,11 @@
     <aside>
       <p>Copyright © {{date}} - All right reserved by Iván García Torresano</p>
     </aside>
-    <div class="grid grid-cols-5">
+    <div class="hidden lg:grid grid-cols-5">
       @for (clan of clans; track clan) {
         <button
           [routerLink]="'clans/' + clan">
-          <img class="bg-white border rounded-full w-10 mr-2" [src]="'/' + clan + '.webp'" [alt]="clan | titlecase">
+          <img class="bg-white border rounded-full w-5 lg:w-10 mr-2" [src]="'/assets/images/' + clan + '.webp'" [alt]="clan | titlecase">
         </button>
       }
     </div>

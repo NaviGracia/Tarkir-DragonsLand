@@ -3,6 +3,13 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@decks/*": ["./src/app/decks/*"],
+      "@clans/*": ["./src/app/clans/*"],
+      "@shared/*": ["./src/app/shared/*"],
+      "@cards/*": ["./src/app/cards/*"],
+    },
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,

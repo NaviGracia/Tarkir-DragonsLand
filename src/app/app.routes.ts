@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
-import { DecksComponent } from './decks/pages/decks/decks.component';
-import { CardsGalleryComponent } from './gallery/pages/cards-gallery/cards-gallery.component';
-import { DetailsPageComponent } from './gallery/pages/cards-gallery/details-page/details-page.component';
+import { CardsGalleryComponent } from './cards/pages/cards-gallery/cards-gallery.component';
+import { DetailsPageComponent } from './cards/pages/cards-gallery/details-page/details-page.component';
+import { PaymentPageComponent } from './payment/pages/payment-page/payment-page.component';
 
 export const routes: Routes = [
   {
@@ -9,16 +9,20 @@ export const routes: Routes = [
     loadChildren: () => import('./clans/clans.routes'),
   },
   {
-    path: 'battlefield',
-    component: DecksComponent,
+    path: 'decks',
+    loadChildren: () => import('./decks/decks.routes'),
   },
   {
-    path: 'bestiary',
+    path: 'cards',
     component: CardsGalleryComponent,
   },
   {
-    path: "bestiary/:id",
+    path: "cards/:id",
     component: DetailsPageComponent,
+  },
+  {
+    path: 'pay-me-mtf',
+    component: PaymentPageComponent,
   },
   {
     path: '**',

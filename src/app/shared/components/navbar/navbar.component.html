@@ -17,37 +17,37 @@
       </div>
       <ul
         tabindex="0"
-        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow gap-2">
         <li>
           <a
             class="btn"
             routerLink="clans"
             routerLinkActive="btn-primary">
-            Dragon's Cave (Home)
+            CLANS
           </a>
         </li>
         <li>
           <a
             class="btn"
-            routerLink="battlefield"
+            routerLink="decks"
             routerLinkActive="btn-primary">
-            Battlefield (Decks)
+            BATTLEFIELD (DECKS)
           </a>
         </li>
         <li>
           <a
             class="btn"
-            routerLink="bestiary"
+            routerLink="cards"
             routerLinkActive="btn-primary">
-            Bestiary (Card Gallery)
+            BESTIARY (CARDS)
           </a>
         </li>
       </ul>
     </div>
     <a
-      class="btn btn-ghost text-primary text-xl"
+      class="btn btn-ghost text-primary text-base lg:text-xl"
       routerLink="/clans"
-    >Tarkir: Dragon's Land</a>
+    >TARKIR: DRAGON'S LAND</a>
   </div>
 
   <!-- Desktop -->
@@ -58,42 +58,42 @@
           class="btn mr-3"
           routerLink="clans"
           routerLinkActive="btn-primary">
-          Clans
+          CLANS
         </a>
       </li>
       <li>
         <a
           class="btn mr-3"
-          routerLink="battlefield"
+          routerLink="decks"
           routerLinkActive="btn-primary">
-          Battlefield (Decks)
+          BATTLEFIELD (DECKS)
         </a>
       </li>
       <li>
         <a
           class="btn mr-3"
-          routerLink="bestiary"
+          routerLink="cards"
           routerLinkActive="btn-primary">
-          Bestiary (Card Gallery)
+          BESTIARY (CARDS)
         </a>
       </li>
     </ul>
   </div>
-  <div class="navbar-end">
+  <div class="navbar-end mr-2">
     <details class="dropdown dropdown-end">
-      <summary tabindex="0" role="button" class="btn m-1" (click)="toggleDropdown()" [class.btn-primary]="isOpen()">Themes</summary>
+      <summary tabindex="0" role="button" class="btn m-1" (click)="toggleDropdown()" [class.btn-primary]="isOpen()">THEMES</summary>
       <ul tabindex="0" class="dropdown-content menu bg-base-300 rounded-box z-[1] w-29 p-2 m-1 shadow">
         @for (clan of clans; track clan) {
           <li>
             <a
             (click)="themeService.changeDataTheme(clan)"
-            >{{ clan | titlecase }}</a>
+            >{{ clan | uppercase }}</a>
           </li>
         }
-        <li>
-          <a
-          (click)="themeService.saveThemeToLocalStorage()"
-          >Save</a>
+        <li class="flex justify-center items-center">
+          <a (click)="themeService.saveThemeToLocalStorage()">
+            <span>SAVE</span>
+          </a>
         </li>
       </ul>
     </details>

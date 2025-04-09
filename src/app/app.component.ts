@@ -1,8 +1,9 @@
 import { Component, inject } from '@angular/core';
-import { NavbarComponent } from "./shared/components/navbar/navbar.component";
 import { RouterOutlet } from '@angular/router';
-import { ThemeService } from './shared/services/theme.service';
-import { FooterComponent } from "./shared/components/footer/footer.component";
+import { FooterComponent } from '@shared/components/footer/footer.component';
+import { NavbarComponent } from '@shared/components/navbar/navbar.component';
+import { ThemeService } from '@shared/services/theme.service';
+
 
 @Component({
   selector: 'app-root',
