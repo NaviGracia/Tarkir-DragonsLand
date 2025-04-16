@@ -1,10 +1,16 @@
-<div class="bg-white">
+<div class="bg-white h-[81vh]">
   <div class="lg:grid lg:grid-cols-[40%_60%]">
     <div>
       <filters-menu (hideGallery)="hideGallery.set($event)"/>
     </div>
     <div [class.hidden]="hideGallery()">
-      <cards-list [searchParams]="searchQuery()"/>
+      @defer (when showCardsList) {
+        <cards-list [searchParams]="searchQuery()" />
+      } @placeholder {
+        <div class=" h-[81vh] container flex items-center justify-center">
+          <p class="loading loading-dots loading-lg"></p>
+        </div>
+      }
     </div>
   </div>
 </div>

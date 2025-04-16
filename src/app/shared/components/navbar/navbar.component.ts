@@ -1,10 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { TitleCasePipe, UpperCasePipe } from '@angular/common';
+import { UpperCasePipe } from '@angular/common';
 import { ThemeService } from '@shared/services/theme.service';
 import { Watermark } from '@shared/interfaces/raw-card.interfaces';
-
-
 
 
 @Component({
@@ -14,9 +12,10 @@ import { Watermark } from '@shared/interfaces/raw-card.interfaces';
 })
 export class NavbarComponent {
   themeService = inject(ThemeService);
-  clans = Object.values(Watermark);
 
   isOpen = signal(false);
+
+  clans = Object.values(Watermark);
 
   toggleDropdown(){
     this.isOpen.set(!this.isOpen());

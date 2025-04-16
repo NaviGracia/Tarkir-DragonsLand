@@ -1,12 +1,12 @@
 
 <div class="lg:col-span-3">
   <div
-    class="h-[116vh] overflow-y-scroll pt-5"
+    class=" h-[81vh] overflow-y-scroll pt-5"
     (scroll)="onScroll($event)"
     #groupDiv>
-    @if ((this.cardsService.totalCards() | cardFilter: searchParams()).length != 0) {
+    @if ((this.cardsService.totalCards()).length != 0) {
       <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        @for (card of this.cardsService.totalCards() | cardFilter: searchParams() ; track card) {
+        @for (card of this.cardsService.totalCards(); track card) {
           <card-item [card]="card"/>
         }
       </div>

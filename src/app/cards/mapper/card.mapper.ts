@@ -1,8 +1,6 @@
 import { Card } from "@shared/interfaces/card.interface";
 import { RawCard } from "@shared/interfaces/raw-card.interfaces";
 
-
-
 export class CardMapper {
   static mapRawCardsToCardsArray( rawCards: RawCard[]): Card[] {
     return rawCards.map(card => this.mapRawCardToCard(card));

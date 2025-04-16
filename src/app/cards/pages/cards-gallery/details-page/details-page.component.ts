@@ -11,10 +11,11 @@ import { Alchemy } from '@shared/interfaces/raw-card.interfaces';
   templateUrl: './details-page.component.html',
 })
 export class DetailsPageComponent {
+  /* Injects */
   activatedRoute = inject(ActivatedRoute);
   cardService = inject(CardsService);
-  cardId: string = this.activatedRoute.snapshot.params['id'];
 
+  /* Resources */
   cardResource = rxResource({
     request: () => ({id: this.cardId}),
     loader: ({request}) => {
@@ -22,14 +23,17 @@ export class DetailsPageComponent {
     }
   });
 
+  /* Signals */
   formattedEffect = computed(() => {
     const effect = this.cardResource.value()?.effect;
     return effect ? effect.replace(/\n/g, '<br>') : '';
   });
 
-
   legalitiesEntries = signal<{ format: string; status: Alchemy }[]>([]);
 
+  cardId: string = this.activatedRoute.snapshot.params['id'];
+
+  /* LifeCycle */
   constructor() {
     effect(() => {
       const card = this.cardResource.value();
@@ -44,6 +48,7 @@ export class DetailsPageComponent {
     });
   }
 
+  /* For showing the correct image */
   checkLegality(legality: Alchemy){
     if(legality.toString() == "legal") return true;
 

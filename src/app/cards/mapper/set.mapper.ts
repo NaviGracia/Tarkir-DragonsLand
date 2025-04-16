@@ -1,8 +1,6 @@
 import { RawSet } from "@shared/interfaces/raw-set.interface";
 import { Set } from "@shared/interfaces/set.interface";
 
-
-
 export class SetMapper {
   //Función diseñada por si se decide escalar a más sets.
   /* static mapRawSetsToSetsArray( items: RawSet[]): Set[] {

@@ -1,4 +1,4 @@
-import { CurrencyPipe, JsonPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Card } from '@shared/interfaces/card.interface';
@@ -10,5 +10,6 @@ import { Card } from '@shared/interfaces/card.interface';
   templateUrl: './item.component.html',
 })
 export class ItemComponent {
+  /* Inputs */
   card = input.required<Card>();
 }

@@ -4,7 +4,7 @@ import { Card } from '@shared/interfaces/card.interface';
 import { RawCard, RawCardResponse } from '@shared/interfaces/raw-card.interfaces';
 import { environment } from 'src/environments/environment.development';
 import { CardMapper } from './mapper/card.mapper';
-import { map, Observable, of, tap } from 'rxjs';
+import { catchError, map, Observable, of, tap } from 'rxjs';
 
 const baseUrl = environment.baseUrl;
 
@@ -12,9 +12,10 @@ const baseUrl = environment.baseUrl;
   providedIn: 'root'
 })
 export class CardsService {
+  /* Injects */
   private http = inject(HttpClient);
 
-  /* Cards Signals */
+  /* Signals */
   cards = signal<Card[]>([]);
   cardsWithPages = signal<Record<number, Card[]>>([]);
   cardsLoading = signal(false);
@@ -28,40 +29,35 @@ export class CardsService {
     this.loadCards();
   }
 
-  loadCards() {
+  /* Gestión HTTP */
+  loadCards(params?: string) {
     if (this.cardsLoading()) return;
+    console.log(params);
+    if(params == undefined) params = '';
 
     this.cardsLoading.set(true);
 
-    this.http.get<RawCardResponse>(`${ environment.endpointAllCards }`)
+    this.http.get<RawCardResponse>(`${ environment.baseUrl }/cards/search`, {
+      params:{
+        q: "e:tdm " + params,
+      }
+    })
+    .pipe(
+      catchError(error => {
+        console.log("No hay cartas con ese criterio de búsqueda", error);
+        this.cardsLoading.set(false);
+        return of({ data: [] })
+      })
+    )
     .subscribe( (resp) => {
       const cards = CardMapper.mapRawCardsToCardsArray(resp.data);
-      this.cards.update( currentCards => [...currentCards, ...cards]);
+      this.cards.set(cards);
+      console.log(cards);
       this.cardsLoading.set(false);
-
+      this.cardsPage.set(1);
+      this.totalCards.set([])
       this.createPagination();
     });
-
-
-  }
-
-  createPagination(){
-    const paginated: Record<number, Card[]> = {};
-
-    for (let i = 0; i < this.cards().length; i += 20) {
-      const pageNumber = i / 20 + 1;
-      paginated[pageNumber] = this.cards().slice(i, i + 20);
-    }
-
-    this.cardsWithPages.set(paginated);
-    this.totalCards.update(currentCards => [...currentCards, ...this.cardsWithPages()[1]]);
-  }
-
-  chargeNextPage(){
-    this.cardsPage.update(page => page + 1);
-
-    if (!this.cardsWithPages()[this.cardsPage()]) return;
-    this.totalCards.update(currentCards => [...currentCards, ...this.cardsWithPages()[this.cardsPage()]]);
   }
 
   getCardById(id: string): Observable<Card>{
@@ -73,5 +69,26 @@ export class CardsService {
       tap((card) => this.cardCache.set(id, card)),
       tap((card) => console.log(card)),
     );
+  }
+  /* ¿Debería estar aquí o en Scroll Service? */
+  /* Crear Paginación Para Infinite Scroll */
+  createPagination(){
+    const paginated: Record<number, Card[]> = {};
+
+    for (let i = 0; i < this.cards().length; i += 20) {
+      const pageNumber = i / 20 + 1;
+      paginated[pageNumber] = this.cards().slice(i, i + 20);
+    }
+
+    this.cardsWithPages.set(paginated);
+    this.totalCards.update(currentCards => [...currentCards, ...this.cardsWithPages()[1]]);
+    console.log(this.totalCards())
+  }
+
+  chargeNextPage(){
+    this.cardsPage.update(page => page + 1);
+
+    if (!this.cardsWithPages()[this.cardsPage()]) return;
+    this.totalCards.update(currentCards => [...currentCards, ...this.cardsWithPages()[this.cardsPage()]]);
   }
 }
