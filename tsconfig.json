@@ -6,10 +6,11 @@
     "baseUrl": "./",
     "paths": {
       "@decks/*": ["./src/app/decks/*"],
-      "@clans/*": ["./src/app/clans/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@cards/*": ["./src/app/cards/*"],
       "@auth/*": ["./src/app/auth/*"],
+      "@cart/*": ["./src/app/cart/*"],
+      "@utils/*": ["./src/app/utils/*"],
     },
     "outDir": "./dist/out-tsc",
     "strict": true,

@@ -3,7 +3,7 @@ import { ColorIdentity, Legalities, MagicAbilities, PurchaseUrls, Rarity, Waterm
 export interface Card{
   id: string;
   name: string;
-  pngUrl: string;
+  pngUrl?: string | undefined;
   manaCost: string;
   type: string;
   power?: string;

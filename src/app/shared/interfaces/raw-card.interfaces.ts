@@ -274,3 +274,5 @@ export enum MagicAbilities {
   Harmonize = "Harmonize",  // Temur mechanic, reduces spell costs from the graveyard
   Omen = "Omen"  // New standalone mechanic (details pending)
 }
+
+

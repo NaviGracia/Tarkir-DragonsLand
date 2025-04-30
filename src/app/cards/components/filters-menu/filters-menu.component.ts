@@ -1,9 +1,12 @@
+import { CurrencyPipe } from '@angular/common';
 import { Component, inject, output, Signal, signal, WritableSignal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { CardsService } from '@cards/cards.service';
+import { ShoppingCartService } from '@cart/services/shopping-cart.service';
 
 @Component({
   selector: 'filters-menu',
-  imports: [],
+  imports: [CurrencyPipe, RouterLink],
   templateUrl: './filters-menu.component.html',
 })
 export class FiltersMenuComponent {
@@ -12,19 +15,24 @@ export class FiltersMenuComponent {
 
   /* Injects */
   cardService = inject(CardsService);
+  cartService = inject(ShoppingCartService);
 
   /* Signals */
   isVisible = signal(false);
+
+  iconOrder = signal("asc");
+  orderBy = signal("");
+
   query = signal('');
   nameQuery = signal('');
-  categoryQuery = signal('');
   selectedColors = signal<string[]>([]);
   selectedTypes = signal<string[]>([]);
+  selectedManaCosts = signal<string[]>([]);
   categoryMap: Record<string, WritableSignal<string[]>> = {
     color: this.selectedColors,
-    type: this.selectedTypes
+    type: this.selectedTypes,
+    cost: this.selectedManaCosts,
   };
-
 
   colorOptions = [
     { label: 'White', value: 'w'},
@@ -44,6 +52,9 @@ export class FiltersMenuComponent {
     { label: 'Planeswalker', value: 'planeswalker'},
     { label: 'Land', value: 'land'},
   ]
+
+  costOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+
 
   /* Getters of Filters */
   onNameSearchChange(value: string){
@@ -71,25 +82,47 @@ export class FiltersMenuComponent {
         ? current.includes(value) ? current : [...current, value]
         : current.filter(item => item !== value)
     );
+    console.log(signal())
 
     console.log(`${category} seleccionados:`, signal());
 
     this.searchCardsWithFilters();
   }
 
-  /* Sending Filters */
-  searchCardsWithFilters(){
-    const colorQuery = "c:" + this.selectedColors().join('');
-    const typeQuery = "type:" + this.selectedTypes().join(' ');
+  onOrderChange(event: Event) {
+    const value = (event.target as HTMLSelectElement).value;
+    this.orderBy.set(value);
+    this.searchCardsWithFilters();
+  }
 
-    this.query.set(this.nameQuery() + " " + colorQuery + " " + typeQuery)
-    console.log(this.query());
-    if(this.query() == ''){
-      this.cardService.loadCards();
+  toggleType(){
+    if(this.iconOrder() == "asc"){
+      this.iconOrder.set("desc");
+      this.searchCardsWithFilters();
       return;
     }
+    this.iconOrder.set("asc");
+    this.searchCardsWithFilters();
+  }
 
-    this.cardService.loadCards(this.query());
+
+  /* Sending Filters */
+  searchCardsWithFilters(){
+    let colorQuery = this.selectedColors().join('');
+    let typeQuery = this.selectedTypes().join(' ');
+    let costQuery = this.selectedManaCosts().join(' or mv=');
+    let orderQuery = this.orderBy();
+
+    if(colorQuery != "") colorQuery = " c:" + colorQuery;
+
+    if(typeQuery != "") typeQuery = " type:" + typeQuery;
+
+    if(costQuery != "") costQuery = " (mv=" + costQuery + ")";
+
+    this.query.set(this.nameQuery() + colorQuery + typeQuery + costQuery);
+    console.log(this.query());
+
+    this.cardService.loadCards(this.query(), orderQuery, this.iconOrder());
     this.query.set('');
   }
 }

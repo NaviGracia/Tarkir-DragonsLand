@@ -1,22 +1,27 @@
-<div class="mx-0.5 mb-4 grid justify-center">
-    <div class="card card-compact w-48 h-96  shadow-xl object-cover transition-transform duration-300 sm:hover:scale-105">
+<div class="mx-0.5 mb-4 grid justify-center animate-spin-clockwise">
+    <div class="card card-compact lg:w-48 h-96  shadow-xl object-cover transition-transform duration-300 sm:hover:scale-105">
       <figure>
         <img
-          class="h-auto w-40 sm:ml-0 sm:max-w-full rounded-lg mt-5"
+          class="h-auto w-40 sm:ml-0 sm:max-w-full rounded-lg mt-5 link"
           [routerLink]='card().id'
           [src]="card().pngUrl"
           [alt]="card().name">
       </figure>
       <div class="card-body grid justify-center">
-        <h2 class="card-title text-sm text-primary justify-center text-center">{{ card().name  }}</h2>
-        <div class="card-actions grid grid-cols-2 justify-items-center items-center">
-          <div>
-            <p class="text-base">{{ card().prices['eur'] | currency:'EUR':'symbol':'1.2-2' }}</p>
-          </div>
-          <div>
-            <button class="flex items-center gap-2 px-4 py-2 bg-pink-200 text-pink-900 hover:bg-pink-300 rounded-full shadow transition-all duration-300 text-lg font-semibold font-[WinkySans]">
+        <h2 class="card-title text-sm text-primary justify-center text-center link no-underline" [routerLink]='card().id'>{{ card().name  }}</h2>
+        <div class="card-actions grid grid-cols-2 items-center">
+          <div class="justify-start">
+            <button
+              [class.animate-spin-counter-clockwise]="purchaseAnimation()"
+              class="flex items-center gap-2 px-4 py-2 bg-primary rounded-full shadow transition-all duration-300 text-lg font-semibold font-[WinkySans]"
+              (click)="addToCart(card())"
+              (click)="activatePurchaseAnimation()"
+            >
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5" d="M15 12h-3m0 0H9m3 0V9m0 3v3M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></svg>
             </button>
+          </div>
+          <div class="justify-end">
+            <p class="text-base text-end">{{ card().prices['eur'] | currency:'EUR':'symbol':'1.2-2' }}</p>
           </div>
         </div>
       </div>

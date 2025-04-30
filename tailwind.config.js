@@ -1,3 +1,5 @@
+import animations from '@midudev/tailwind-animations'
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
@@ -11,6 +13,7 @@ module.exports = {
   },
   plugins: [
     require('daisyui'),
+    animations,
   ],
   daisyui: {
     themes: [

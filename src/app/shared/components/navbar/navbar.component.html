@@ -1,7 +1,7 @@
 <div class="navbar bg-base-100">
   <!-- Phone -->
   <div class="navbar-start">
-    <img class="w-[60px]" src="/assets/images/logo.png" alt="Tarkir: Dragon's Land">
+    <img role="button" routerLink="/" class="w-[60px] hidden lg:display" src="/assets/images/logo.png" alt="Tarkir: Dragon's Land">
     <div class="dropdown">
       <div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
         <svg
@@ -47,7 +47,7 @@
       </ul>
     </div>
     <a
-      class="btn btn-ghost text-primary text-base lg:text-xl"
+      class="btn btn-ghost text-primary text-base lg:text-xl animate-slide-in-left"
       routerLink="/clans"
     >TARKIR: DRAGON'S LAND</a>
   </div>
@@ -57,7 +57,7 @@
     <ul class="menu menu-horizontal px-1">
       <li>
         <a
-          class="btn mr-3"
+          class="btn mr-3 hover:animate-tilt"
           routerLink="clans"
           routerLinkActive="btn-primary">
           CLANS
@@ -65,7 +65,7 @@
       </li>
       <li>
         <a
-          class="btn mr-3"
+          class="btn mr-3 hover:animate-tilt"
           routerLink="decks"
           routerLinkActive="btn-primary">
           BATTLEFIELD (DECKS)
@@ -73,7 +73,7 @@
       </li>
       <li>
         <a
-          class="btn mr-3"
+          class="btn mr-3 hover:animate-tilt"
           routerLink="cards"
           routerLinkActive="btn-primary">
           BESTIARY (CARDS)
@@ -82,7 +82,7 @@
     </ul>
   </div>
   <div class="navbar-end">
-    <div class="dropdown dropdown-end">
+    <div class="dropdown dropdown-end hidden lg:display">
       <div tabindex="0" role="button" class="btn w-24" (click)="toggleDropdown()" [class.btn-primary]="isOpen()">THEMES</div>
       <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-24 p-2 shadow">
         @for (clan of clans; track clan) {
@@ -99,41 +99,67 @@
         </li>
       </ul>
     </div>
-    <div class="dropdown dropdown-end ml-1">
-      <div tabindex="0" role="button" class="rounded-full flex items-center justify-center btn btn-ghost btn-circle avatar">
-        <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-            <path d="M2.707 10.295a2.41 2.41 0 0 0 0 3.41l7.588 7.588a2.41 2.41 0 0 0 3.41 0l7.588-7.588a2.41 2.41 0 0 0 0-3.41l-7.588-7.588a2.41 2.41 0 0 0-3.41 0z"/>
-            <path d="M14.5 9.25a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0M16.809 18c-1.275-4.565-8.272-4.587-9.6-.063"/>
-          </g>
-        </svg>
-      </div>
-      <ul
-        tabindex="0"
-        class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-32 p-2 shadow">
-        <li class="justify-items-end">
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-              <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
-                <path d="M2.707 10.295a2.41 2.41 0 0 0 0 3.41l7.588 7.588a2.41 2.41 0 0 0 3.41 0l7.588-7.588a2.41 2.41 0 0 0 0-3.41l-7.588-7.588a2.41 2.41 0 0 0-3.41 0z"/>
-                <path d="M14.5 9.25a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0M16.809 18c-1.275-4.565-8.272-4.587-9.6-.063"/>
-              </g>
-            </svg>
-            <a routerLink="/user/login">Profile</a>
+    @if (authService.user()) {
+      <div class="dropdown dropdown-end ml-1">
+        <div>
+          <div class="flex justify-end items-center w-full">
+            <div class="dropdown dropdown-end ml-1 justify-items-center">
+              <div tabindex="0" role="button" class="rounded-full lg:items-center lg:justify-center btn btn-ghost btn-circle avatar">
+                  <!-- User Icon -->
+                  <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                      <path d="M2.707 10.295a2.41 2.41 0 0 0 0 3.41l7.588 7.588a2.41 2.41 0 0 0 3.41 0l7.588-7.588a2.41 2.41 0 0 0 0-3.41l-7.588-7.588a2.41 2.41 0 0 0-3.41 0z"/>
+                      <path d="M14.5 9.25a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0M16.809 18c-1.275-4.565-8.272-4.587-9.6-.063"/>
+                    </g>
+                  </svg>
+                </div>
+                <div>
+                  <p class="hidden lg:display">{{ authService.user()?.displayName }}</p>
+                </div>
+              </div>
+            </div>
           </div>
-        </li>
-        <li>
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" d="M3.661 10.64c.473.296.777.802.777 1.36s-.304 1.064-.777 1.36c-.321.203-.529.364-.676.556a2 2 0 0 0-.396 1.479c.052.394.285.798.75 1.605c.467.807.7 1.21 1.015 1.453a2 2 0 0 0 1.479.396c.24-.032.483-.13.819-.308a1.62 1.62 0 0 1 1.567.008c.483.28.77.795.79 1.353c.014.38.05.64.143.863a2 2 0 0 0 1.083 1.083C10.602 22 11.068 22 12 22s1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083c.092-.223.129-.483.143-.863c.02-.558.307-1.074.79-1.353a1.62 1.62 0 0 1 1.567-.008c.336.178.58.276.82.308a2 2 0 0 0 1.478-.396c.315-.242.548-.646 1.014-1.453c.208-.36.369-.639.489-.873m-.81-2.766a1.62 1.62 0 0 1-.777-1.36c0-.559.304-1.065.777-1.362c.321-.202.528-.363.676-.555a2 2 0 0 0 .396-1.479c-.052-.394-.285-.798-.75-1.605c-.467-.807-.7-1.21-1.015-1.453a2 2 0 0 0-1.479-.396c-.24.032-.483.13-.82.308a1.62 1.62 0 0 1-1.566-.008a1.62 1.62 0 0 1-.79-1.353c-.014-.38-.05-.64-.143-.863a2 2 0 0 0-1.083-1.083C13.398 2 12.932 2 12 2s-1.398 0-1.765.152a2 2 0 0 0-1.083 1.083c-.092.223-.129.483-.143.863a1.62 1.62 0 0 1-.79 1.353a1.62 1.62 0 0 1-1.567.008c-.336-.178-.58-.276-.82-.308a2 2 0 0 0-1.478.396C4.04 5.79 3.806 6.193 3.34 7c-.208.36-.369.639-.489.873"/></g></svg>
-            <a>Settings</a>
-          </div>
-        </li>
-        <li>
-          <div>
-            <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="M10 12h10m0 0l-3-3m3 3l-3 3"/><path d="M4 12a8 8 0 0 1 8-8m0 16a7.99 7.99 0 0 1-6.245-3"/></g></svg>
-            <a>Logout</a>
-          </div>
-        </li>
-      </ul>
+
+          <ul
+            tabindex="0"
+            class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-32 p-2 shadow">
+            <li class="justify-items-end">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5">
+                    <path d="M2.707 10.295a2.41 2.41 0 0 0 0 3.41l7.588 7.588a2.41 2.41 0 0 0 3.41 0l7.588-7.588a2.41 2.41 0 0 0 0-3.41l-7.588-7.588a2.41 2.41 0 0 0-3.41 0z"/>
+                    <path d="M14.5 9.25a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0M16.809 18c-1.275-4.565-8.272-4.587-9.6-.063"/>
+                  </g>
+                </svg>
+                <a>Profile</a>
+              </div>
+            </li>
+            <li>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path stroke-linecap="round" d="M3.661 10.64c.473.296.777.802.777 1.36s-.304 1.064-.777 1.36c-.321.203-.529.364-.676.556a2 2 0 0 0-.396 1.479c.052.394.285.798.75 1.605c.467.807.7 1.21 1.015 1.453a2 2 0 0 0 1.479.396c.24-.032.483-.13.819-.308a1.62 1.62 0 0 1 1.567.008c.483.28.77.795.79 1.353c.014.38.05.64.143.863a2 2 0 0 0 1.083 1.083C10.602 22 11.068 22 12 22s1.398 0 1.765-.152a2 2 0 0 0 1.083-1.083c.092-.223.129-.483.143-.863c.02-.558.307-1.074.79-1.353a1.62 1.62 0 0 1 1.567-.008c.336.178.58.276.82.308a2 2 0 0 0 1.478-.396c.315-.242.548-.646 1.014-1.453c.208-.36.369-.639.489-.873m-.81-2.766a1.62 1.62 0 0 1-.777-1.36c0-.559.304-1.065.777-1.362c.321-.202.528-.363.676-.555a2 2 0 0 0 .396-1.479c-.052-.394-.285-.798-.75-1.605c-.467-.807-.7-1.21-1.015-1.453a2 2 0 0 0-1.479-.396c-.24.032-.483.13-.82.308a1.62 1.62 0 0 1-1.566-.008a1.62 1.62 0 0 1-.79-1.353c-.014-.38-.05-.64-.143-.863a2 2 0 0 0-1.083-1.083C13.398 2 12.932 2 12 2s-1.398 0-1.765.152a2 2 0 0 0-1.083 1.083c-.092.223-.129.483-.143.863a1.62 1.62 0 0 1-.79 1.353a1.62 1.62 0 0 1-1.567.008c-.336-.178-.58-.276-.82-.308a2 2 0 0 0-1.478.396C4.04 5.79 3.806 6.193 3.34 7c-.208.36-.369.639-.489.873"/></g></svg>
+                <a>Settings</a>
+              </div>
+            </li>
+            <li>
+              <div (click)="authService.logout()" role="button" class="bg-red-500 hover:bg-red-300">
+                <svg class="" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="M10 12h10m0 0l-3-3m3 3l-3 3"/><path d="M4 12a8 8 0 0 1 8-8m0 16a7.99 7.99 0 0 1-6.245-3"/></g></svg>
+                <a>Logout</a>
+              </div>
+            </li>
+          </ul>
+        </div>
+      <div>
     </div>
+    }@else {
+      <div class="mx-3">
+        <a
+          class="btn hover:animate-tilt"
+          routerLink="/user/login"
+          routerLinkActive="btn-primary"
+        >
+          Sign In
+        </a>
+      </div>
+    }
+
 </div>

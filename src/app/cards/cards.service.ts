@@ -26,20 +26,22 @@ export class CardsService {
   private cardCache = new Map<string, Card>();
 
   constructor(){
-    this.loadCards();
+    this.loadCards("", "name", "asc");
   }
 
   /* Gestión HTTP */
-  loadCards(params?: string) {
+  loadCards(params?: string, order?: string, dir?: string) {
     if (this.cardsLoading()) return;
-    console.log(params);
+
     if(params == undefined) params = '';
 
     this.cardsLoading.set(true);
 
     this.http.get<RawCardResponse>(`${ environment.baseUrl }/cards/search`, {
       params:{
-        q: "e:tdm " + params,
+        q: "e:tdm" + params,
+        order: order ? order : "",
+        dir: dir ? dir : "",
       }
     })
     .pipe(

@@ -2,6 +2,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@plugin "@midudev/tailwind-animations";
 
 @layer base{
   @font-face {
@@ -9,3 +10,4 @@
     src: url('/assets/fonts/winky.ttf') format("truetype");
   }
 }
+

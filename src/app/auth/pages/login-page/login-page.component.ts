@@ -12,20 +12,14 @@ import { AuthService } from '@auth/services/auth.service';
 export class LoginPageComponent {
   private router = inject(Router);
   private fb = inject(FormBuilder);
-  private authService = inject(AuthService);
+  authService = inject(AuthService);
 
-  loginForm!: FormGroup;
+  signInForm = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
+  });
 
-  constructor() {}
-
-  ngOnInit() {
-    this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
-
-  onLogin() {
+  /* onLogin() {
     if (this.loginForm.invalid) return;
 
     const { email, password } = this.loginForm.value;
@@ -37,15 +31,5 @@ export class LoginPageComponent {
       .catch(error => {
         console.error('Login error', error);
       });
-  }
-
-  loginWithGoogle() {
-    this.authService.loginWithGoogle()
-      .then(() => {
-        
-      })
-      .catch(error => {
-        console.error('Google login error', error);
-      });
-  }
+  } */
 }

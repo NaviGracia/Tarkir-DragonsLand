@@ -20,8 +20,13 @@
     <div class="hidden lg:grid grid-cols-5">
       @for (clan of clans; track clan) {
         <button
-          [routerLink]="'clans/' + clan">
-          <img class="bg-white border rounded-full w-5 lg:w-10 mr-2" [src]="'/assets/images/' + clan + '.webp'" [alt]="clan | titlecase">
+          [routerLink]="'clans/' + clan"
+        >
+          @if (themeService.actualTheme() == "forest" || themeService.actualTheme() == "dracula" || themeService.actualTheme() == "synthwave") {
+            <img class="bg-white border rounded-full w-5 lg:w-10 mr-2" [src]="'/assets/images/' + clan + '.webp'" [alt]="clan | titlecase">
+          }@else {
+            <img class="rounded-full w-5 lg:w-10 mr-2" [src]="'/assets/images/' + clan + '.webp'" [alt]="clan | titlecase">
+          }
         </button>
       }
     </div>

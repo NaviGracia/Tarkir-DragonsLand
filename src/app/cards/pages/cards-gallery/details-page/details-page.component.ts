@@ -4,6 +4,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { CardsService } from '@cards/cards.service';
 import { CurrencyPipe, TitleCasePipe } from '@angular/common';
 import { Alchemy } from '@shared/interfaces/raw-card.interfaces';
+import { ShoppingCartService } from '@cart/services/shopping-cart.service';
 
 @Component({
   selector: 'app-details-page',
@@ -14,6 +15,7 @@ export class DetailsPageComponent {
   /* Injects */
   activatedRoute = inject(ActivatedRoute);
   cardService = inject(CardsService);
+  cartService = inject(ShoppingCartService);
 
   /* Resources */
   cardResource = rxResource({
