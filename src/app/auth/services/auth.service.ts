@@ -1,5 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, updateProfile } from '@angular/fire/auth';
+import {
+  Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
+  signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, updateProfile
+} from '@angular/fire/auth';
 import { signal } from '@angular/core';
 import { Router } from '@angular/router';
 
