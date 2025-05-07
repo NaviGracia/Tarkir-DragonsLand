@@ -39,7 +39,7 @@ export class CardsService {
 
     this.http.get<RawCardResponse>(`${ environment.baseUrl }/cards/search`, {
       params:{
-        q: "e:tdm" + params,
+        q: "e:tdm " + params,
         order: order ? order : "",
         dir: dir ? dir : "",
       }
@@ -83,6 +83,7 @@ export class CardsService {
     }
 
     this.cardsWithPages.set(paginated);
+    console.log(paginated, this.cardsWithPages())
     this.totalCards.update(currentCards => [...currentCards, ...this.cardsWithPages()[1]]);
     console.log(this.totalCards())
   }

@@ -16,6 +16,14 @@ export class DetailsPageComponent {
   activatedRoute = inject(ActivatedRoute);
   cardService = inject(CardsService);
   cartService = inject(ShoppingCartService);
+  legalitiesEntries = signal<{ format: string; status: Alchemy }[]>([]);
+
+  formattedEffect = computed(() => {
+    const effect = this.cardResource.value()?.effect;
+    return effect ? effect.replace(/\n/g, '<br>') : '';
+  });
+
+  cardId: string = this.activatedRoute.snapshot.params['id'];
 
   /* Resources */
   cardResource = rxResource({
@@ -24,16 +32,6 @@ export class DetailsPageComponent {
       return this.cardService.getCardById(request.id)
     }
   });
-
-  /* Signals */
-  formattedEffect = computed(() => {
-    const effect = this.cardResource.value()?.effect;
-    return effect ? effect.replace(/\n/g, '<br>') : '';
-  });
-
-  legalitiesEntries = signal<{ format: string; status: Alchemy }[]>([]);
-
-  cardId: string = this.activatedRoute.snapshot.params['id'];
 
   /* LifeCycle */
   constructor() {

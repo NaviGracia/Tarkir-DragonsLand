@@ -4,6 +4,7 @@ export interface CartData {
     name: string;
     price: number;
     quantity: number;
+    imageUrl: string;
   }[];
   updatedAt?: any;
 }

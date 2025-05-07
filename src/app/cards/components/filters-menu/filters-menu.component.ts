@@ -3,6 +3,8 @@ import { Component, inject, output, Signal, signal, WritableSignal } from '@angu
 import { RouterLink } from '@angular/router';
 import { CardsService } from '@cards/cards.service';
 import { ShoppingCartService } from '@cart/services/shopping-cart.service';
+import { DebounceService } from '@shared/services/debounce.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'filters-menu',
@@ -54,6 +56,27 @@ export class FiltersMenuComponent {
   ]
 
   costOptions = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+  private subscription: Subscription | null = null;
+
+  constructor(private debounceService: DebounceService){}
+
+  ngOnInit() {
+    this.subscription = this.debounceService.setup((value) => {
+      this.onNameSearchChange(value);
+    });
+  }
+
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.debounceService.destroy();
+  }
+
+  handleInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.debounceService.next(value);
+  }
 
 
   /* Getters of Filters */
@@ -82,9 +105,6 @@ export class FiltersMenuComponent {
         ? current.includes(value) ? current : [...current, value]
         : current.filter(item => item !== value)
     );
-    console.log(signal())
-
-    console.log(`${category} seleccionados:`, signal());
 
     this.searchCardsWithFilters();
   }
