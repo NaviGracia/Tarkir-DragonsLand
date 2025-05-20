@@ -1,6 +1,9 @@
 import { Routes } from "@angular/router";
 import { UserLayoutComponent } from "./layout/user-layout/user-layout.component";
-import { SettingsPageComponent } from "./pages/settings-page/settings-page.component";
+import { ProfilePageComponent } from "./pages/profile-page/profile-page.component";
+import { OrdersPageComponent } from "./pages/orders-page/orders-page.component";
+import { BillingPageComponent } from "./pages/billing-page/billing-page.component";
+import { AuthGuard } from "@auth/guards/auth.guard";
 
 export const userRoutes: Routes = [
   {
@@ -8,14 +11,25 @@ export const userRoutes: Routes = [
     component: UserLayoutComponent,
     children: [
       {
-        path: 'config',
-        component: SettingsPageComponent,
+        path: 'profile',
+        component: ProfilePageComponent,
+      },
+      {
+        path: 'billing',
+        component: BillingPageComponent,
+      },
+      {
+        path: 'orders',
+        component: OrdersPageComponent,
       },
       {
         path: '**',
         redirectTo: 'config',
       },
     ],
+    canActivate: [
+      AuthGuard
+    ]
   },
 ];
 

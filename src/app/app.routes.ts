@@ -11,10 +11,6 @@ export const routes: Routes = [
     component: HomePageComponent,
   },
   {
-    path: 'decks',
-    loadChildren: () => import('./decks/decks.routes'),
-  },
-  {
     path: 'cards',
     component: CardsGalleryComponent,
   },
@@ -30,12 +26,16 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'user',
+    path: 'auth',
     loadChildren: () => import('./auth/auth.routes'),
   },
   {
     path: 'pay-me-mtf',
     component: PaymentPageComponent,
+  },
+  {
+    path: 'user',
+    loadChildren: () => import('./user/user.routes')
   },
   {
     path: '**',

@@ -11,6 +11,7 @@
       "@auth/*": ["./src/app/auth/*"],
       "@cart/*": ["./src/app/cart/*"],
       "@utils/*": ["./src/app/utils/*"],
+      "@user/*": ["./src/app/user/*"],
     },
     "outDir": "./dist/out-tsc",
     "strict": true,
