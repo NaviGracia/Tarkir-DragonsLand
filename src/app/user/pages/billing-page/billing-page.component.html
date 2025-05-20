@@ -1,0 +1,164 @@
+<!-- Contenido principal -->
+<div class="flex-1 mb-5">
+  <div class="bg-white rounded-lg shadow p-6">
+    <h2 class="text-2xl font-bold mb-6">Payment methods</h2>
+
+    <div class="border-b pb-6 mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold">Credit Cards</h3>
+        <button class="bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md">
+          Add new card
+        </button>
+      </div>
+
+      <!-- Lista de tarjetas -->
+      <div class="space-y-4">
+        <!-- Tarjeta 1 -->
+        @if (!hideCard1()) {
+          <div class="border rounded-lg p-4">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-800" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V6C22 4.89543 21.1046 4 20 4H4ZM4 6H20V10H4V6ZM4 12H6V14H4V12ZM8 12H12V14H8V12ZM4 16H12V18H4V16Z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium">Visa ending in 4242</p>
+                  <p class="text-sm text-gray-600">Expires 12/2026</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                @if (defaultCard() !== 1 || hideCard2()) {
+                  <button (click)="openChangeDialog(1)" class="py-1 px-2 text-blue-600 bg-blue-100 rounded hover:text-blue-800 text-sm font-medium">Set as default</button>
+                } @else {
+                  <span class="text-green-600 text-sm font-medium bg-green-100 py-1 px-2 rounded">Default</span>
+                }
+                <span (click)="openRemoveDialog(1)" class="link text-red-700 text-sm font-medium py-1 px-2 rounded">
+                  Remove
+                </span>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Tarjeta 2 -->
+        @if (!hideCard2()) {
+          <div class="border rounded-lg p-4">
+            <div class="flex justify-between items-center">
+              <div class="flex items-center gap-3">
+                <div class="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V6C22 4.89543 21.1046 4 20 4H4ZM4 6H20V10H4V6ZM4 12H6V14H4V12ZM8 12H12V14H8V12ZM4 16H12V18H4V16Z"/>
+                  </svg>
+                </div>
+                <div>
+                  <p class="font-medium">Mastercard ending in 5678</p>
+                  <p class="text-sm text-gray-600">Expires 09/2025</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                @if (defaultCard() !== 2 || hideCard1() ) {
+                  <button (click)="openChangeDialog(2)" class="py-1 px-2 text-blue-600 bg-blue-100 rounded hover:text-blue-800 text-sm font-medium">Set as default</button>
+                } @else {
+                  <span class="text-green-600 text-sm font-medium bg-green-100 py-1 px-2 rounded">Default</span>
+                }
+                <span (click)="openRemoveDialog(2)" class="link text-red-700 text-sm font-medium py-1 px-2 rounded">
+                  Remove
+                </span>
+              </div>
+            </div>
+          </div>
+        }
+        @if (hideCard1() && hideCard2()) {
+          <p class="text-center text-primary">No hay tarjetas vinculadas</p>
+        }
+      </div>
+    </div>
+    @if (showRemoveDialog()) {
+      <app-confirm-dialog
+        title="¿Eliminar Tarjeta?"
+        message="¿Estás seguro de que deseas eliminar tu tarjeta permanentemente?&#10;Se activará la siguiente tarjeta disponible como predeterminada."
+        [destructive]=true
+        (confirm)="confirmDelete()"
+        (cancel)="cancelDelete()"
+      />
+    }
+
+    @if (showChangeDialog()) {
+      <app-confirm-dialog
+        title="Cambiar Tarjeta"
+        message="¿Confirma que esta sea su nueva tarjeta predeterminada?"
+        (confirm)="changeDefaultCard()"
+        (cancel)="closeChangeDialog()"
+      />
+    }
+
+    <!-- Información de facturación -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4">Billing Address</h3>
+
+        <div class="border rounded-lg p-4 mb-4">
+          <div class="flex justify-between">
+            <div>
+              <p class="font-medium">{{ billingAddress.name || authService.user()?.displayName }}</p>
+              <p class="text-gray-600">{{ billingAddress.addressLine1 }}</p>
+              @if (billingAddress.addressLine2) {
+                <p class="text-gray-600">{{ billingAddress.addressLine2 }}</p>
+              }
+              <p class="text-gray-600">{{ billingAddress.city }}, {{ billingAddress.country }}</p>
+            </div>
+            <div>
+              <button (click)="openAddressDialog()" class="text-blue-600 hover:text-blue-800">Edit</button>
+            </div>
+          </div>
+        </div>
+
+      <app-billing-address-dialog
+        [isOpen]="addressDialog()"
+        [currentAddress]="billingAddress"
+        (close)="closeAddressDialog()"
+        (save)="saveAddress($event)"
+      ></app-billing-address-dialog>
+
+      <!-- Historial de facturación -->
+      <div class="mt-6">
+        <h3 class="text-xl font-semibold mb-4">Billing History</h3>
+
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-gray-200">
+            <thead>
+              <tr>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-200">
+              @for (order of orderService.orders(); track $index) {
+                <tr>
+                  <td class="px-4 py-4 whitespace-nowrap">{{ order.createdAt }}</td>
+                  <td class="px-4 py-4 whitespace-nowrap">{{ order.total | currency:'EUR':'symbol':'1.2-2' }}</td>
+                  <td class="px-4 py-4 whitespace-nowrap">
+                    <ng-container *ngIf="generateState() as currentState">
+                      <span
+                        class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800"
+                        [class.text-green-800]="currentState === 'Paid'"
+                        [class.bg-green-100]="currentState === 'Paid'"
+                        [class.text-blue-800]="currentState === 'Processing'"
+                        [class.bg-blue-100]="currentState === 'Processing'"
+                        [class.text-red-800]="currentState === 'Rejected'"
+                        [class.bg-red-100]="currentState === 'Rejected'"
+                      >{{ currentState }}</span>
+                    </ng-container>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

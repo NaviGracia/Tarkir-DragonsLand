@@ -1,5 +1,4 @@
-import { CurrencyPipe } from '@angular/common';
-import { Component, inject, output, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, inject, output, signal, WritableSignal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CardsService } from '@cards/cards.service';
 import { ShoppingCartService } from '@cart/services/shopping-cart.service';
@@ -8,7 +7,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'filters-menu',
-  imports: [CurrencyPipe, RouterLink],
+  imports: [RouterLink],
   templateUrl: './filters-menu.component.html',
 })
 export class FiltersMenuComponent {
@@ -23,7 +22,7 @@ export class FiltersMenuComponent {
   isVisible = signal(false);
 
   iconOrder = signal("asc");
-  orderBy = signal("");
+  orderBy = signal("name");
 
   query = signal('');
   nameQuery = signal('');

@@ -13,11 +13,12 @@ import { ShoppingCartService } from '@cart/services/shopping-cart.service';
 export class PreviewPageComponent {
   cartService = inject(ShoppingCartService);
 
-  //Better Looking only
   discount = signal(0);
   sendingTax = signal(0);
 
-  total = computed<number>(() =>
-    this.cartService.subtotal() - this.discount() + this.sendingTax()
-  )
+  total = computed(() => {
+    return this.cartService.total() + this.sendingTax() - this.discount();
+  })
+
+  constructor(){}
 }

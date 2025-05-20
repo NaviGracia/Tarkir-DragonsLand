@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { UserNavbarComponent } from "../../components/user-navbar/user-navbar.component";
 
 @Component({
   selector: 'app-user-layout',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, UserNavbarComponent],
   templateUrl: './user-layout.component.html',
 })
 export class UserLayoutComponent { }

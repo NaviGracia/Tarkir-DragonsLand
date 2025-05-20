@@ -1,13 +1,13 @@
 <main class="mx-auto max-w-8xl px-4 sm:px-6 lg:px-8 ">
   <div class="flex items-baseline justify-between border-b border-gray-200 pt-4">
-    <h1 class="text-xl lg:text-3xl font-bold tracking-tight text-gray-900">Bestiary</h1>
+    <h1 class="animate-slide-in-top text-xl lg:text-3xl font-bold tracking-tight text-gray-900">Bestiary</h1>
 
     <div class="flex items-center">
       <!-- Buscador por nombre -->
       <div class="items-center hidden lg:flex justify-between py-4 md:py-4 flex-wrap gap-2">
         <input
             type="text"
-            class="input input-bordered w-60 max-w-xs ml-5 sm:ml-4"
+            class="input input-bordered w-60 max-w-xs ml-5 sm:ml-4 animate-slide-in-top"
             placeholder="Search Card"
             (input)="handleInput($event)"
             #txtSearch/>
@@ -21,8 +21,8 @@
         Filters
       </button>
       <!-- Carrito Compra -->
-      <div class="dropdown dropdown-end ml-3">
-        <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+      <div class="animate-slide-in-top dropdown dropdown-end ml-3">
+        <div tabindex="0" routerLink="/cart" role="button" class="btn btn-ghost btn-circle">
           <div class="indicator">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -36,21 +36,9 @@
                 stroke-width="2"
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-            <span class="badge badge-sm indicator-item">{{ cartService.cart().length }}</span>
-          </div>
-        </div>
-        <div
-          tabindex="0"
-          class="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
-          <div class="card-body">
-            <span class="text-lg font-bold">{{ cartService.cart().length }} Products</span>
-            <span class="text-primary">Subtotal: {{ cartService.subtotal() | currency:'EUR':'symbol':'1.2-2' }}</span>
-            <div class="card-actions">
-              <button
-                class="btn btn-primary btn-block"
-                routerLink="/cart"
-              >View cart</button>
-            </div>
+            <span class="badge badge-sm indicator-item grid-cols">
+              {{ cartService.itemCount() }}
+            </span>
           </div>
         </div>
       </div>
@@ -164,7 +152,7 @@
           </div>
         </div>
     }@else {
-      <div class="grid grid-cols-1 gap-x-8 gap-y-10">
+      <div class="grid grid-cols-1 gap-x-8 gap-y-10 animate-fade-in">
         <!-- Desktop Filters -->
         <form class="hidden lg:grid grid-cols-3">
           <!-- Color Filter -->
@@ -257,7 +245,7 @@
         </form>
       </div>
       <!-- Ordenación -->
-      <div class="my-5">
+      <div class="my-5 animate-fade-in">
         <h4 class="text-base">
           Order By
         </h4>
@@ -282,8 +270,7 @@
               [value]="orderBy()"
               (change)="onOrderChange($event)"
               id="underline_select" class="block py-2.5 px-0 w-full text-sm text-gray-500 bg-transparent border-0 border-b-2 border-gray-200 appearance-none dark:text-gray-400 dark:border-gray-700 focus:outline-none focus:ring-0 focus:border-gray-200 peer">
-                <option value="" selected>Default</option>
-                <option value="name">Name</option>
+                <option value="name" selected>Name</option>
                 <option value="rarity">Rarity</option>
                 <option value="cmc">Cost</option>
                 <option value="eur">Price</option>

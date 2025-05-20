@@ -1,0 +1,108 @@
+<!-- billing-address-dialog.component.html -->
+<div *ngIf="isOpen" class="fixed inset-0 z-50 overflow-auto bg-gray-800 bg-opacity-50 flex justify-center items-center">
+  <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+    <div class="border-b px-6 py-4 flex justify-between items-center">
+      <h3 class="text-xl font-semibold text-gray-900">Edit Billing Address</h3>
+      <button (click)="onClose()" class="text-gray-500 hover:text-gray-700">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+          <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+        </svg>
+      </button>
+    </div>
+
+    <form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="px-6 py-4">
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-medium mb-2" for="name">
+          Full Name
+        </label>
+        <input
+          formControlName="name"
+          id="name"
+          type="text"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+        <p *ngIf="addressForm.get('name')?.invalid && addressForm.get('name')?.touched"
+           class="text-red-600 text-xs mt-1">
+          Name is required
+        </p>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-medium mb-2" for="addressLine1">
+          Address Line 1
+        </label>
+        <input
+          formControlName="addressLine1"
+          id="addressLine1"
+          type="text"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+        <p *ngIf="addressForm.get('addressLine1')?.invalid && addressForm.get('addressLine1')?.touched"
+           class="text-red-600 text-xs mt-1">
+          Address is required
+        </p>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-medium mb-2" for="addressLine2">
+          Address Line 2 (Optional)
+        </label>
+        <input
+          formControlName="addressLine2"
+          id="addressLine2"
+          type="text"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-medium mb-2" for="city">
+          City
+        </label>
+        <input
+          formControlName="city"
+          id="city"
+          type="text"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+        <p *ngIf="addressForm.get('city')?.invalid && addressForm.get('city')?.touched"
+           class="text-red-600 text-xs mt-1">
+          City is required
+        </p>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 text-sm font-medium mb-2" for="country">
+          Country
+        </label>
+        <input
+          formControlName="country"
+          id="country"
+          type="text"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+        <p *ngIf="addressForm.get('country')?.invalid && addressForm.get('country')?.touched"
+           class="text-red-600 text-xs mt-1">
+          Country is required
+        </p>
+      </div>
+
+      <div class="mt-6 flex justify-end space-x-3">
+        <button
+          type="button"
+          (click)="onClose()"
+          class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="!addressForm.valid"
+          class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-blue-300"
+        >
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

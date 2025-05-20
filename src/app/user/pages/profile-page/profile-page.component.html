@@ -1,0 +1,134 @@
+
+<div class="overflow-hidden rounded-xl sm:bg-white sm:px-8 sm:shadow mb-5">
+  <div class="pt-4 grid grid-cols-2 justify">
+    <h1 class="py-2 text-2xl font-semibold">Account settings</h1>
+  </div>
+  <hr class="mt-4 mb-8" />
+  <form [formGroup]="profileForm">
+    <p class="py-2 text-xl font-semibold">Display Name</p>
+    <p class="text-gray-600">Your display name is <span class="text-primary">{{ authService.getUserDisplayName() }}</span></p>
+    <label>
+      <span class="text-sm text-gray-500">New Display Name</span>
+      <div class="relative flex overflow-hidden rounded-md border-2 transition focus-within:border-blue-600">
+        <input type="text" formControlName="displayName" class="w-full py-2 px-4" />
+
+        @if (profileForm.get('displayName')?.touched) {
+          <ul class="text-sm text-red-600 mt-1">
+            @for (error of fu.getFieldError(profileForm, 'displayName'); track $index) {
+              <li>
+                {{ error }}
+              </li>
+            }
+          </ul>
+        }
+      </div>
+    </label>
+    <button (click)="updateDisplayName()" class="mt-4 rounded-lg bg-primary px-4 py-2 text-white">Save</button>
+  </form>
+  <hr class="mt-4 mb-8" />
+
+  <form [formGroup]="profileForm">
+    <p class="py-2 text-xl font-semibold">Email Address</p>
+    @if(!externalProveedor()){
+      <p class="text-gray-600">Your email address is <span class="text-primary">{{ authService.user()?.email }}</span></p>
+      <label>
+        <span class="text-sm text-gray-500">New Email</span>
+        <div class="relative flex overflow-hidden rounded-md border-2 transition focus-within:border-blue-600">
+          <input type="email" formControlName="email" class="w-full py-2 px-4" />
+
+          @if (profileForm.get('email')?.touched) {
+            <ul class="text-sm text-red-600 mt-1">
+              @for (error of fu.getFieldError(profileForm, 'email'); track $index) {
+                <li>
+                  {{ error }}
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      </label>
+      <button (click)="updateEmail()" class="mt-4 rounded-lg bg-primary px-4 py-2 text-white">Save</button>
+    }@else {
+      <div class="mt-2 text-sm text-primary">
+        You can't change your email because you signed in with a third-party provider (like Google).
+      </div>
+    }
+  </form>
+
+  <hr class="mt-4 mb-8" />
+
+  <form [formGroup]="profileForm">
+    <p class="py-2 text-xl font-semibold">Password</p>
+    @if(!externalProveedor())
+    {
+      <div formGroupName="passwordGroup">
+        <div class="grid grid-cols-2 w-[50%] gap-10">
+          <label>
+            <span class="text-sm">Current Password</span>
+            <div class="relative flex overflow-hidden rounded-md border-2 transition focus-within:border-blue-600">
+              <input type="password" formControlName="currentPassword" class="w-full py-2 px-4" />
+
+              @if (profileForm.get('passwordGroup.currentPassword')?.touched) {
+                <ul class="text-sm text-red-600 mt-1">
+                  @for (error of fu.getFieldError(profileForm, 'passwordGroup.currentPassword'); track $index) {
+                    <li>
+                      {{ error }}
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          </label>
+          <label>
+            <span class="text-sm">New Password</span>
+            <div class="relative flex overflow-hidden rounded-md border-2 transition focus-within:border-blue-600">
+              <input type="password" formControlName="newPassword"  class="w-full py-2 px-4"/>
+
+              @if (profileForm.get('passwordGroup.newPassword')?.touched) {
+                <ul class="text-sm text-red-600 mt-1">
+                  @for (error of fu.getFieldError(profileForm, 'passwordGroup.newPassword'); track $index) {
+                    <li>
+                      {{ error }}
+                    </li>
+                  }
+                </ul>
+              }
+            </div>
+          </label>
+        </div>
+      </div>
+      <button (click)="updatePassword()" class="mt-4 bg-primary text-white px-4 py-2 rounded">
+        Save Password
+      </button>
+    }@else {
+      <div class="mt-2 text-sm text-primary">
+        You can't change your password because you signed in with a third-party provider (like Google).
+      </div>
+    }
+  </form>
+
+  <hr class="mt-4 mb-8" />
+
+  <div class="mb-10">
+    <p class="py-2 text-xl font-semibold">Delete Account</p>
+    <p class="inline-flex items-center rounded-full bg-rose-100 px-4 py-1 text-rose-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="mr-2 h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+      </svg>
+      Proceed with caution
+    </p>
+    <p class="mt-2">Make sure you have taken backup of your account in case you ever need to get access to your data. We will completely wipe your data. There is no way to access your account after this action.</p>
+    <button (click)="openDialog()" class="ml-auto text-sm font-semibold text-rose-600 underline decoration-2">Continue with deletion</button>
+  </div>
+  @if (showDialog()) {
+    <app-confirm-dialog
+      title="¿Eliminar cuenta?"
+      message="¿Estás seguro de que deseas eliminar tu cuenta permanentemente?"
+      (confirm)="confirmDelete()"
+      (cancel)="cancelDelete()"
+    />
+  }
+</div>
+
+
+

@@ -9,13 +9,11 @@ import { ListComponent } from "../../components/list-view/list.component";
 })
 
 export class CardsGalleryComponent implements OnInit{
-  /* Signals */
   searchQuery = signal('');
   hideGallery = signal(false);
 
   showCardsList = false;
 
-  /* LifeCycle */
   constructor() {
     this.hideGallery.set(false);
   }
@@ -23,6 +21,6 @@ export class CardsGalleryComponent implements OnInit{
   ngOnInit(): void {
     setTimeout(() => {
       this.showCardsList = true
-    }, 2000);
+    }, 1000);
   }
 }

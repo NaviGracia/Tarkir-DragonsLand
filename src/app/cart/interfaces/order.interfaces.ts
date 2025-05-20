@@ -1,15 +1,12 @@
-import { CartData } from "./cart-data.interfaces";
-
-export interface OrderResponse {
-  total:  number;
-  orders: Order[];
-}
-
 export interface Order {
-  id:        number;
-  userId:    number;
-  address:   string;
-  status:    string;
-  createdAt: Date;
-  items:     CartData;
+  createdAt: string;
+  items: {
+    imageUrl: string;
+    name: string;
+    price: number;
+    productId: string;
+    quantity: number;
+  }[];
+  total: number;
+  userId: string;
 }

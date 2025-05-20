@@ -1,255 +1,163 @@
-import {
-  signal,
-  computed,
-  inject,
-  Injectable,
-  effect,
-} from '@angular/core';
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc,
-  deleteDoc,
-  serverTimestamp,
-  onSnapshot,
-  DocumentReference,
-  DocumentData
-} from "firebase/firestore";
-import { getAuth, onAuthStateChanged, User } from "firebase/auth";
-import { CartData } from '@cart/interfaces/cart-data.interfaces';
-
-export interface CartItem {
-  productId: string;
-  name: string;
-  price: number;
-  quantity: number;
-  imageUrl: string;
-  [key: string]: any; // Para permitir propiedades adicionales
-}
+import { Order } from './../interfaces/order.interfaces';
+import { Injectable, inject, signal, computed } from '@angular/core';
+import { Firestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc } from '@angular/fire/firestore';
+import { Auth, onAuthStateChanged } from '@angular/fire/auth';
+import { Cart, CartItem } from '@cart/interfaces/cart-item.interfaces';
+import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Card } from '@shared/interfaces/card.interface';
+import { CartItemMapper } from '@cart/mapper/cart-item.mapper';
+import { Router } from '@angular/router';
+import { OrderService } from '@user/services/order.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService {
-  private firestore = getFirestore();
-  private auth = getAuth();
-  private cartRef: DocumentReference<DocumentData> | null = null;
-  private currentUser: User | null = null;
+  private router = inject(Router)
+  private afs: Firestore = inject(Firestore);
+  private auth: Auth = inject(Auth);
+  private orderService: OrderService = inject(OrderService);
 
-  // Signal para almacenar el carrito
-  readonly cart = signal<CartItem[]>([]);
-  readonly isInitialized = signal<boolean>(false);
+  private userId = signal<string | null>(null);
+
+  private cartSignal = signal<Cart>({ items: [] });
+
+  cart = computed<CartItem[]>(() => {
+    const cartData = this.cartSignal();
+    return cartData?.items ?? [];
+  });
+
+  total = computed(() => {
+    const items = this.cart();
+    return items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  });
+
+  itemCount = computed(() => {
+    const items = this.cart();
+    return items.reduce((total, item) => total + item.quantity, 0);
+  });
 
   constructor() {
-    // Escuchar cambios en el estado de autenticación
-    onAuthStateChanged(this.auth, (user) => {
-      this.currentUser = user;
-
-      if (user) {
-        this.initCart(user.uid);
-      } else {
-        this.cartRef = null;
-        this.cart.set([]);
-        this.isInitialized.set(false);
-      }
-    });
-
-    // También inicializar el carrito si el usuario ya está autenticado
-    const user = this.auth.currentUser;
-    if (user) {
-      this.initCart(user.uid);
-    }
-  }
-
-  private initCart(userId: string) {
-    // Inicializar la referencia al carrito
-    this.cartRef = doc(this.firestore, 'carts', userId);
-    this.listenToCart();
-    this.isInitialized.set(true);
-  }
-
-  private listenToCart() {
-    if (!this.cartRef) return;
-
-    onSnapshot(this.cartRef, (docSnap) => {
-      if (docSnap.exists()) {
-        const data = docSnap.data() as CartData;
-        this.cart.set(data?.items || []);
-      } else {
-        // Si el documento no existe, inicializarlo
-        this.createEmptyCart();
+    onAuthStateChanged(this.auth, user => {
+      this.userId.set(user?.uid ?? null);
+      if (user?.uid) {
+        this.loadCart(user.uid);
       }
     });
   }
 
-  private async createEmptyCart() {
-    if (!this.cartRef) return;
+  private loadCart(uid: string): void {
+    const cartDocRef = doc(this.afs, `carts/${uid}`);
+    from(getDoc(cartDocRef)).pipe(
+      map(snapshot => snapshot.exists() ? snapshot.data() as Cart : { items: [] })
+    ).subscribe(cartData => {
+      this.cartSignal.set(cartData);
+    });
+  }
 
-    try {
-      await setDoc(this.cartRef, {
-        items: [],
-        createdAt: serverTimestamp(),
-        updatedAt: serverTimestamp()
+  async addToCart(product: Card) {
+    const uid = this.userId();
+    if (!uid) {
+      this.router.navigateByUrl('/auth/login');
+      return;
+    };
+
+    const cartRef = doc(this.afs, `carts/${uid}`);
+    const snap = await getDoc(cartRef);
+    const cartData = snap.exists() ? snap.data() as Cart : { items: [] };
+    const items = cartData.items;
+
+    const pr = this.cartSignal().items.find(p => p.productId == product.id);
+
+    if(pr) {
+      items.map((pr) => {
+        if(pr.productId == product.id){
+          pr.quantity = pr.quantity + 1
+        }
       });
-    } catch (error) {
-      console.error("Error creating empty cart:", error);
+    } else {
+      items.push(CartItemMapper.mapCardToCartItem(product));
+      console.log(CartItemMapper.mapCardToCartItem(product));
     }
+
+    await setDoc(cartRef, { items, updatedAt: new Date() }, { merge: true });
+    this.cartSignal.set({ items });
   }
 
-  // Método para obtener la cantidad actual de un producto en el carrito
-  getProductQuantity(productId: string): number {
-    const item = this.cart().find(item => item.productId === productId);
-    return item ? item.quantity : 0;
-  }
+  async modifyCart(index: number, cartItem: CartItem, plus: boolean){
+    const uid = this.userId();
+    const cartRef = doc(this.afs, `carts/${uid}`);
+    const snap = await getDoc(cartRef);
+    const cartData = snap.exists() ? snap.data() as Cart : { items: [] };
+    const items = cartData.items;
 
-  async addToCart(product: CartItem) {
-    try {
-      // Verificar que cartRef esté inicializado
-      if (!this.cartRef) {
-        if (!this.currentUser) {
-          console.error("Cannot add to cart: User not logged in");
-          return;
-        }
-
-        // Intentar inicializar el carrito
-        this.initCart(this.currentUser.uid);
-
-        // Verificar nuevamente
-        if (!this.cartRef) {
-          console.error("Cannot add to cart: Failed to initialize cart reference");
-          return;
-        }
-      }
-
-      // Verificar primero los datos actuales en Firestore
-      const cartDoc = await getDoc(this.cartRef);
-      let currentItems: CartItem[] = [];
-
-      if (cartDoc.exists()) {
-        const data = cartDoc.data() as CartData;
-        currentItems = data?.items || [];
-      }
-
-      // Buscar el producto en los items actuales
-      const index = currentItems.findIndex(p => p.productId === product.productId);
-
-      if (index !== -1) {
-        // Si existe, actualizar su cantidad
-        currentItems[index].quantity += product.quantity;
-        // También actualizar otros campos en caso de que hayan cambiado
-        currentItems[index].name = product.name;
-        currentItems[index].price = product.price;
-        // Mantener propiedades adicionales
-        Object.keys(product).forEach(key => {
-          if (!['productId', 'name', 'price', 'quantity'].includes(key)) {
-            currentItems[index][key] = product[key];
+    items.map((pr) => {
+      if(pr.productId == cartItem.productId){
+        if(plus){
+          pr.quantity = pr.quantity + 1
+        }else{
+          if(pr.quantity > 1) {
+            pr.quantity = pr.quantity - 1
+          } else{
+            this.removeFromCart(index);
           }
-        });
-      } else {
-        // Si no existe, añadirlo al array
-        currentItems.push({...product});
-      }
-
-      // Actualizar el documento en Firestore
-      await setDoc(this.cartRef, {
-        items: currentItems,
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
-
-      // El listener onSnapshot actualizará automáticamente la signal cart
-
-    } catch (error) {
-      console.error("Error adding to cart:", error);
-    }
-  }
-
-  async updateQuantity(productId: string, newQuantity: number) {
-    try {
-      if (!this.cartRef) {
-        console.error("Cannot update quantity: Cart reference not initialized");
-        return;
-      }
-
-      // Verificar datos actuales en Firestore
-      const cartDoc = await getDoc(this.cartRef);
-      if (!cartDoc.exists()) {
-        console.error("Cart document does not exist");
-        return;
-      }
-
-      const data = cartDoc.data() as CartData;
-      const currentItems: CartItem[] = data?.items || [];
-
-      const index = currentItems.findIndex(p => p.productId === productId);
-
-      if (index !== -1) {
-        // Actualizar la cantidad
-        currentItems[index].quantity = newQuantity;
-
-        // Si la cantidad es 0 o menor, eliminar el producto
-        if (newQuantity <= 0) {
-          currentItems.splice(index, 1);
         }
-
-        // Actualizar en Firestore
-        await setDoc(this.cartRef, {
-          items: currentItems,
-          updatedAt: serverTimestamp(),
-        }, { merge: true });
       }
-    } catch (error) {
-      console.error("Error updating quantity:", error);
-    }
+    });
+
+    await setDoc(cartRef, { items, updatedAt: new Date() }, { merge: true });
+    this.cartSignal.set({ items });
   }
 
-  async removeFromCart(productId: string) {
-    try {
-      if (!this.cartRef) {
-        console.error("Cannot remove from cart: Cart reference not initialized");
-        return;
-      }
+  async removeFromCart(index: number) {
+    const uid = this.userId();
+    if (!uid) throw new Error('Usuario no autenticado');
 
-      // Verificar datos actuales en Firestore
-      const cartDoc = await getDoc(this.cartRef);
-      if (!cartDoc.exists()) return;
+    const cartRef = doc(this.afs, `carts/${uid}`);
+    const snap = await getDoc(cartRef);
+    const cartData = snap.exists() ? snap.data() as Cart : { items: [] };
+    const items = cartData.items;
 
-      const data = cartDoc.data() as CartData;
-      const currentItems: CartItem[] = data?.items || [];
+    items.splice(index, 1);
 
-      const updatedItems = currentItems.filter(p => p.productId !== productId);
-
-      await setDoc(this.cartRef, {
-        items: updatedItems,
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
-    } catch (error) {
-      console.error("Error removing from cart:", error);
-    }
+    await updateDoc(cartRef, { items });
+    this.cartSignal.set({ items });
   }
 
   async clearCart() {
-    try {
-      if (!this.cartRef) {
-        console.error("Cannot clear cart: Cart reference not initialized");
-        return;
-      }
+    const uid = this.userId();
+    if (!uid) throw new Error('Usuario no autenticado');
 
-      await setDoc(this.cartRef, {
-        items: [],
-        updatedAt: serverTimestamp(),
-      }, { merge: true });
+    const cartRef = doc(this.afs, `carts/${uid}`);
+    await deleteDoc(cartRef);
+    this.cartSignal.set({ items: [] });
+  }
+
+  async checkout() {
+    const uid = this.userId();
+    if (!uid) throw new Error('Usuario no autenticado');
+
+    const cartRef = doc(this.afs, `carts/${uid}`);
+    const snap = await getDoc(cartRef);
+    if (!snap.exists()) throw new Error('Carrito no encontrado');
+
+    const cartData: any = snap.data();
+    const orderData: Order = {
+      createdAt: new Date().toISOString(),
+      items: cartData.items,
+      total: this.total(),
+      userId: uid
+    };
+
+    try {
+      await this.orderService.addOrder(orderData);
+      await deleteDoc(cartRef);
+      this.cartSignal.set({ items: [] });
+      this.router.navigateByUrl('/');
     } catch (error) {
-      console.error("Error clearing cart:", error);
+      console.error('Error al procesar la orden:', error);
     }
   }
 
-  readonly subtotal = computed(() =>
-    this.cart().reduce((sum, item) => sum + item.price * item.quantity, 0)
-  );
-
-  readonly itemCount = computed(() =>
-    this.cart().reduce((count, item) => count + item.quantity, 0)
-  );
 }
