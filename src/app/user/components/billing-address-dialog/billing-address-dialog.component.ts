@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, output, Output, input } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
@@ -8,10 +8,10 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angula
   templateUrl: './billing-address-dialog.component.html',
 })
 export class BillingAddressDialogComponent {
-  @Input() isOpen = false;
-  @Input() currentAddress: any = {};
-  @Output() close = new EventEmitter<void>();
-  @Output() save = new EventEmitter<any>();
+  isOpen = input.required();
+  currentAddress = input.required<any>();
+  close = output<void>();
+  save = output<any>();
 
   addressForm: FormGroup;
 
@@ -30,7 +30,7 @@ export class BillingAddressDialogComponent {
   }
 
   ngOnChanges(): void {
-    if (this.isOpen) {
+    if (this.isOpen()) {
       this.resetForm();
     }
   }
@@ -38,11 +38,11 @@ export class BillingAddressDialogComponent {
   resetForm(): void {
     if (this.currentAddress) {
       this.addressForm.setValue({
-        name: this.currentAddress.name || '',
-        addressLine1: this.currentAddress.addressLine1 || '',
-        addressLine2: this.currentAddress.addressLine2 || '',
-        city: this.currentAddress.city || '',
-        country: this.currentAddress.country || ''
+        name: this.currentAddress().name || '',
+        addressLine1: this.currentAddress().addressLine1 || '',
+        addressLine2: this.currentAddress().addressLine2 || '',
+        city: this.currentAddress().city || '',
+        country: this.currentAddress().country || ''
       });
     }
   }

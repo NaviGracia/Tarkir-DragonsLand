@@ -39,7 +39,7 @@ export class CardsService {
 
     this.http.get<RawCardResponse>(`${ environment.baseUrl }/cards/search`, {
       params:{
-        q: "e:tdm " + params,
+        q: "e:tdm" + params,
         order: order ? order : "",
         dir: dir ? dir : "",
       }

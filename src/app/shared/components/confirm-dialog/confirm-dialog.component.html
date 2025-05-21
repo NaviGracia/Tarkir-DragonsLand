@@ -1,7 +1,7 @@
 <div class="fixed inset-0 flex items-center justify-center z-50 bg-black/50">
   <div class="bg-white p-6 rounded-2xl shadow-xl w-full max-w-md">
-    <h2 class="text-xl font-bold mb-4">{{ title }}</h2>
-    <p class="text-gray-600 mb-6 whitespace-pre-line">{{ message }}</p>
+    <h2 class="text-xl font-bold mb-4">{{ title() }}</h2>
+    <p class="text-gray-600 mb-6 whitespace-pre-line">{{ message() }}</p>
     <div class="flex justify-end gap-3">
       <button
         class="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-100"
@@ -10,15 +10,17 @@
         Cancelar
       </button>
       <button
-        [class.bg-red-600]="destructive"
-        [class.hover:bg-red-700]="destructive"
-        [class.bg-blue-600]="!destructive"
-        [class.hover:bg-blue-700]="!destructive"
+        [class.bg-red-600]="destructive()"
+        [class.hover:bg-red-700]="destructive()"
+        [class.bg-blue-600]="!destructive()"
+        [class.hover:bg-blue-700]="!destructive()"
         class="px-4 py-2  text-white rounded-lg"
-        (click)="confirm.emit()"
+        (click)="confirm.emit(card() || 0)"
       >
-        Borrar
+        {{ confirmText() }}
       </button>
     </div>
   </div>
 </div>
+
+

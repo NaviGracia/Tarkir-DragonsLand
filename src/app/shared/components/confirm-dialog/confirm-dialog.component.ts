@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, inject, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -7,9 +7,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   imports: [],
 })
 export class ConfirmDialogComponent {
-  @Input() title = '¿Sure?';
-  @Input() message = 'This action cannot be undone.';
-  @Input() destructive = false;
-  @Output() confirm = new EventEmitter<void>();
-  @Output() cancel = new EventEmitter<void>();
+  title = input.required<string>();
+  message = input.required<string>();
+  card = input<number>();
+  destructive = input<boolean>(false);
+  confirmText = input<string>();
+  confirm = output<number>();
+  cancel = output<void>();
 }

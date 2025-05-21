@@ -1,18 +1,26 @@
-import { inject, Injectable, computed, WritableSignal, signal, Signal } from '@angular/core';
+import { effect, inject, Injectable, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Auth, onAuthStateChanged, User } from '@angular/fire/auth';
-import { Firestore, collection, collectionData, query, where } from '@angular/fire/firestore';
-import { Order } from '@cart/interfaces/order.interfaces';
-import { addDoc, CollectionReference, DocumentData, Query } from 'firebase/firestore';
-import { Observable, of } from 'rxjs';
+import { Firestore, collection, collectionData } from '@angular/fire/firestore';
+import { addDoc } from 'firebase/firestore';
+import { Observable } from 'rxjs';
 
+const loadFromLocalStorage = () => {
+  const ordersFromLocalStorage = localStorage.getItem('orders');
+  if (!ordersFromLocalStorage || ordersFromLocalStorage == 'undefined') return null;
+  const parsedOrders = JSON.parse(ordersFromLocalStorage) as any[];
+  console.log(parsedOrders);
+  return parsedOrders;
+};
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
   private fs = inject(Firestore);
+
   private ordersCollection = collection(this.fs, 'orders');
+
+  orderStorage = signal(loadFromLocalStorage());
 
   readonly orders = toSignal(
     collectionData(this.ordersCollection, { idField: 'id' }) as Observable<any[]>,
@@ -20,11 +28,11 @@ export class OrderService {
   );
 
   constructor() {
-    collectionData(this.ordersCollection, { idField: 'id' }).subscribe({
-      next: data => console.log('Datos recibidos:', data),
-      error: err => console.error('Error al obtener datos:', err)
+    collectionData(this.ordersCollection, { idField: 'id' });
+    effect(() => {
+      localStorage.setItem('orders', JSON.stringify(this.orders()));
+      this.orderStorage.set(loadFromLocalStorage());
     });
-    console.log(this.orders)
   }
 
   addOrder(order: any) {

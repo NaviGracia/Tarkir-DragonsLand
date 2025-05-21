@@ -5,6 +5,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { FormUtils } from '@utils/form-utils';
 import { User } from 'firebase/auth';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-page',
@@ -14,6 +15,7 @@ import { CommonModule } from '@angular/common';
 export class ProfilePageComponent implements OnInit{
   authService = inject(AuthService);
   private fb = inject(FormBuilder);
+  private router = inject(Router);
 
   fu = FormUtils;
 
@@ -46,6 +48,8 @@ export class ProfilePageComponent implements OnInit{
     this.showDialog.set(false);
     console.log('✅ Cuenta eliminada');
     this.authService.deleteCurrentUser();
+    this.router.navigateByUrl('/');
+
   }
 
   cancelDelete() {

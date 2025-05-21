@@ -1,6 +1,6 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
 import { FormUtils } from '@utils/form-utils';
 
@@ -10,6 +10,7 @@ import { FormUtils } from '@utils/form-utils';
   templateUrl: './register-page.component.html',
 })
 export class RegisterPageComponent {
+  router = inject(Router);
   authService = inject(AuthService);
   fb = inject(FormBuilder);
   formUtils = FormUtils;
@@ -31,6 +32,9 @@ export class RegisterPageComponent {
     if(this.registerForm.invalid) return;
     this.formSubmitted.set(true);
 
-    this.authService.register(this.registerForm.controls['username'].value?.toString() || '', this.registerForm.controls['email'].value?.toString() || '', this.registerForm.controls['password'].value?.toString() || '');
+    this.authService.register(this.registerForm.controls['username'].value?.toString() || '', this.registerForm.controls['email'].value?.toString() || '', this.registerForm.controls['password'].value?.toString() || '')
+      .then((response) => {
+        this.router.navigateByUrl('');
+      });
   }
 }

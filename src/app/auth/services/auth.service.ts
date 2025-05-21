@@ -1,13 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import {
   Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword,
-  signOut, onAuthStateChanged, User, GoogleAuthProvider, signInWithPopup, updateProfile,
+  signOut, onAuthStateChanged, User, signInWithPopup, updateProfile,
   deleteUser,
   reauthenticateWithCredential,
   EmailAuthProvider,
   updatePassword,
-  updateEmail
+  updateEmail,
+  reauthenticateWithPopup
 } from '@angular/fire/auth';
+import { GoogleAuthProvider } from 'firebase/auth';
 import { signal } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -22,6 +24,7 @@ const loadFromLocalStorage = () => {
 export class AuthService {
   router = inject(Router);
   private auth = inject(Auth);
+  private provider = new GoogleAuthProvider;
 
   user = signal<User | null>(loadFromLocalStorage());
 
@@ -79,7 +82,9 @@ export class AuthService {
   async deleteCurrentUser(): Promise<void> {
     const user = this.auth.currentUser;
     if (user) {
-      await deleteUser(user);
+      reauthenticateWithPopup(user!, this.provider).then(() => {
+        return deleteUser(user!);
+      })
     } else {
       throw new Error('No hay usuario autenticado');
     }

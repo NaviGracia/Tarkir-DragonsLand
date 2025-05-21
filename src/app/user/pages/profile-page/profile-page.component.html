@@ -124,6 +124,8 @@
     <app-confirm-dialog
       title="¿Eliminar cuenta?"
       message="¿Estás seguro de que deseas eliminar tu cuenta permanentemente?"
+      confirmText="Eliminar"
+      [destructive]="true"
       (confirm)="confirmDelete()"
       (cancel)="cancelDelete()"
     />
