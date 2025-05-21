@@ -2,11 +2,40 @@
   <h2 class="text-2xl font-bold mb-4 text-gray-800">Pagar carta</h2>
 
   <div id="card-element" class="p-4 border border-gray-300 rounded-xl"></div>
-
   <button
     (click)="pay()"
-    class="mt-6 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-xl transition-all"
-  >
-    Pagar
-  </button>
+    class="mt-6 mb-5 w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-xl transition-all"
+  >Pagar</button>
+
+  <div class="border rounded-lg p-4 mb-4 hover:bg-blue-100" role="button" (click)="payWithSavedCard()">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-800" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V6C22 4.89543 21.1046 4 20 4H4ZM4 6H20V10H4V6ZM4 12H6V14H4V12ZM8 12H12V14H8V12ZM4 16H12V18H4V16Z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-medium">Visa ending in 4242</p>
+          <p class="text-sm text-gray-600">Expires 12/2026</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="border rounded-lg p-4 mb-4 hover:bg-blue-100" role="button" (click)="payWithSavedCard()">
+    <div class="flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-8 bg-gray-200 rounded flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-red-600" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4 4C2.89543 4 2 4.89543 2 6V18C2 19.1046 2.89543 20 4 20H20C21.1046 20 22 19.1046 22 18V6C22 4.89543 21.1046 4 20 4H4ZM4 6H20V10H4V6ZM4 12H6V14H4V12ZM8 12H12V14H8V12ZM4 16H12V18H4V16Z"/>
+          </svg>
+        </div>
+        <div>
+          <p class="font-medium">Mastercard ending in 5678</p>
+          <p class="text-sm text-gray-600">Expires 09/2025</p>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

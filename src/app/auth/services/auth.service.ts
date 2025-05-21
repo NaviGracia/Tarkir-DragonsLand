@@ -12,6 +12,7 @@ import {
 import { GoogleAuthProvider } from 'firebase/auth';
 import { signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { SnackbarService } from '@shared/services/snackbar.service';
 
 const loadFromLocalStorage = () => {
   const userFromLocalStorage = localStorage.getItem('user');
@@ -25,6 +26,7 @@ export class AuthService {
   router = inject(Router);
   private auth = inject(Auth);
   private provider = new GoogleAuthProvider;
+  private _snackService = inject(SnackbarService);
 
   user = signal<User | null>(loadFromLocalStorage());
 
@@ -83,6 +85,8 @@ export class AuthService {
     const user = this.auth.currentUser;
     if (user) {
       reauthenticateWithPopup(user!, this.provider).then(() => {
+        this.router.navigateByUrl('/');
+        this._snackService.openSnackBar('Usuario Eliminado');
         return deleteUser(user!);
       })
     } else {
@@ -94,7 +98,9 @@ export class AuthService {
     const currentUser = this.auth.currentUser;
     if (currentUser) {
       try {
-        await updateProfile(currentUser, { displayName });
+        await updateProfile(currentUser, { displayName }).then(() => {
+          this._snackService.openSnackBar('Nombre de Usuario Actualizado')
+        });;
         this.user.set({...currentUser});
         return true;
       } catch (error) {
@@ -108,7 +114,9 @@ export class AuthService {
   async updateCurrentUserEmail(newEmail: string): Promise<void> {
     const user = this.auth.currentUser;
     if (user) {
-      await updateEmail(user, newEmail);
+      await updateEmail(user, newEmail).then(() => {
+        this._snackService.openSnackBar('Email Actualizado')
+      });;
     } else {
       throw new Error('No hay usuario autenticado');
     }
@@ -117,7 +125,9 @@ export class AuthService {
   async updateCurrentUserPassword(newPassword: string): Promise<void> {
     const user = this.auth.currentUser;
     if (user) {
-      await updatePassword(user, newPassword);
+      await updatePassword(user, newPassword).then(() => {
+        this._snackService.openSnackBar('Contraseña Actualizada')
+      });
     } else {
       throw new Error('No hay usuario autenticado');
     }

@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { ShoppingCartService } from '@cart/services/shopping-cart.service';
 import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
 
 @Component({
@@ -7,6 +8,8 @@ import { loadStripe, Stripe, StripeElements } from '@stripe/stripe-js';
   templateUrl: './payment-page.component.html',
 })
 export class PaymentPageComponent {
+  private cartService = inject(ShoppingCartService);
+
   stripe: Stripe | null = null;
   elements: StripeElements | null = null;
   cardElement: any;
@@ -48,6 +51,12 @@ export class PaymentPageComponent {
     } else {
       console.log('Método de pago:', paymentMethod);
       alert('✅ Pago simulado exitosamente');
+
+      await this.cartService.checkout();
     }
+  }
+
+  payWithSavedCard() {
+    this.cartService.checkout();
   }
 }

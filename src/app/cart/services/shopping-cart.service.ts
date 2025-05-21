@@ -9,15 +9,17 @@ import { Card } from '@shared/interfaces/card.interface';
 import { CartItemMapper } from '@cart/mapper/cart-item.mapper';
 import { Router } from '@angular/router';
 import { OrderService } from '@user/services/order.service';
+import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ShoppingCartService {
-  private router = inject(Router)
-  private afs: Firestore = inject(Firestore);
-  private auth: Auth = inject(Auth);
-  private orderService: OrderService = inject(OrderService);
+  private _snackbarService = inject(SnackbarService);
+  private _router = inject(Router)
+  private _afs: Firestore = inject(Firestore);
+  private _auth: Auth = inject(Auth);
+  private _orderService: OrderService = inject(OrderService);
 
   private userId = signal<string | null>(null);
 
@@ -39,7 +41,7 @@ export class ShoppingCartService {
   });
 
   constructor() {
-    onAuthStateChanged(this.auth, user => {
+    onAuthStateChanged(this._auth, user => {
       this.userId.set(user?.uid ?? null);
       if (user?.uid) {
         this.loadCart(user.uid);
@@ -48,7 +50,7 @@ export class ShoppingCartService {
   }
 
   private loadCart(uid: string): void {
-    const cartDocRef = doc(this.afs, `carts/${uid}`);
+    const cartDocRef = doc(this._afs, `carts/${uid}`);
     from(getDoc(cartDocRef)).pipe(
       map(snapshot => snapshot.exists() ? snapshot.data() as Cart : { items: [] })
     ).subscribe(cartData => {
@@ -59,11 +61,11 @@ export class ShoppingCartService {
   async addToCart(product: Card) {
     const uid = this.userId();
     if (!uid) {
-      this.router.navigateByUrl('/auth/login');
+      this._router.navigateByUrl('/auth/login');
       return;
     };
 
-    const cartRef = doc(this.afs, `carts/${uid}`);
+    const cartRef = doc(this._afs, `carts/${uid}`);
     const snap = await getDoc(cartRef);
     const cartData = snap.exists() ? snap.data() as Cart : { items: [] };
     const items = cartData.items;
@@ -87,7 +89,7 @@ export class ShoppingCartService {
 
   async modifyCart(index: number, cartItem: CartItem, plus: boolean){
     const uid = this.userId();
-    const cartRef = doc(this.afs, `carts/${uid}`);
+    const cartRef = doc(this._afs, `carts/${uid}`);
     const snap = await getDoc(cartRef);
     const cartData = snap.exists() ? snap.data() as Cart : { items: [] };
     const items = cartData.items;
@@ -114,7 +116,7 @@ export class ShoppingCartService {
     const uid = this.userId();
     if (!uid) throw new Error('Usuario no autenticado');
 
-    const cartRef = doc(this.afs, `carts/${uid}`);
+    const cartRef = doc(this._afs, `carts/${uid}`);
     const snap = await getDoc(cartRef);
     const cartData = snap.exists() ? snap.data() as Cart : { items: [] };
     const items = cartData.items;
@@ -129,7 +131,7 @@ export class ShoppingCartService {
     const uid = this.userId();
     if (!uid) throw new Error('Usuario no autenticado');
 
-    const cartRef = doc(this.afs, `carts/${uid}`);
+    const cartRef = doc(this._afs, `carts/${uid}`);
     await deleteDoc(cartRef);
     this.cartSignal.set({ items: [] });
   }
@@ -138,7 +140,7 @@ export class ShoppingCartService {
     const uid = this.userId();
     if (!uid) throw new Error('Usuario no autenticado');
 
-    const cartRef = doc(this.afs, `carts/${uid}`);
+    const cartRef = doc(this._afs, `carts/${uid}`);
     const snap = await getDoc(cartRef);
     if (!snap.exists()) throw new Error('Carrito no encontrado');
 
@@ -151,10 +153,11 @@ export class ShoppingCartService {
     };
 
     try {
-      await this.orderService.addOrder(orderData);
+      await this._orderService.addOrder(orderData);
       await deleteDoc(cartRef);
       this.cartSignal.set({ items: [] });
-      this.router.navigateByUrl('/');
+      this._router.navigateByUrl('/');
+      this._snackbarService.openSnackBar('Compra realizada')
     } catch (error) {
       console.error('Error al procesar la orden:', error);
     }

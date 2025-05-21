@@ -4,7 +4,7 @@ import { AuthService } from '@auth/services/auth.service';
 import { OrderService } from '@user/services/order.service';
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 import { BillingAddressDialogComponent } from "../../components/billing-address-dialog/billing-address-dialog.component";
-import {MatSnackBar} from '@angular/material/snack-bar';
+import { SnackbarService } from '@shared/services/snackbar.service';
 
 @Component({
   selector: 'app-billing-page',
@@ -15,7 +15,7 @@ import {MatSnackBar} from '@angular/material/snack-bar';
 export class BillingPageComponent implements AfterViewInit {
   orderService = inject(OrderService);
   authService = inject(AuthService);
-  private _snackBar = inject(MatSnackBar);
+  private _snackbarService = inject(SnackbarService);
 
   defaultCard = signal(1);
   showRemoveDialog = signal(false);
@@ -69,20 +69,20 @@ export class BillingPageComponent implements AfterViewInit {
       this.hideCard2.set(true);
       this.defaultCard.set(1);
     }
-    this.openSnackBar('Tarjeta Eliminada');
+    this._snackbarService.openSnackBar('Tarjeta Eliminada');
     this.showRemoveDialog.set(false);
   }
 
   saveAddress(address: any): void {
     this.billingAddress = address;
-    this.openSnackBar('Dirección Cambiada');
+    this._snackbarService.openSnackBar('Dirección Cambiada');
     this.closeAddressDialog();
   }
 
   changeDefaultCard() {
     this.defaultCard.set(this.cardDialog());
     this.closeChangeDialog();
-    this.openSnackBar('Tarjeta por defecto cambiada');
+    this._snackbarService.openSnackBar('Tarjeta por defecto cambiada');
   }
 
   cancelDelete() {
@@ -114,7 +114,7 @@ export class BillingPageComponent implements AfterViewInit {
   generateStates() {
     if(this.orderService.orderStorage() != null) {
       for (let index = 0; index < this.orderService.orderStorage()!.length; index++) {
-        const num = Math.floor(Math.random() * 3) + 1;
+        const num = Math.floor(Math.random() * 2) + 1;
         switch(num) {
           case 1:
             this.states.update((states) => {
@@ -127,22 +127,8 @@ export class BillingPageComponent implements AfterViewInit {
               return [...states, 'Processing'];
             });
             break;
-
-          default:
-            this.states.update((states) => {
-              return [...states, 'Rejected'];
-            });
-            break;
         }
       }
     }
-  }
-
-  openSnackBar(message: string) {
-    this._snackBar.open(message, '', {
-      duration: 3000,
-      horizontalPosition: 'start',
-      verticalPosition: 'bottom'
-    });
   }
 }

@@ -30,7 +30,7 @@ export const routes: Routes = [
     loadChildren: () => import('./auth/auth.routes'),
   },
   {
-    path: 'pay-me-mtf',
+    path: 'payment',
     component: PaymentPageComponent,
   },
   {

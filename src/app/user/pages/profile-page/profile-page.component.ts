@@ -3,9 +3,7 @@ import { AuthService } from '@auth/services/auth.service';
 import { ConfirmDialogComponent } from "../../../shared/components/confirm-dialog/confirm-dialog.component";
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormUtils } from '@utils/form-utils';
-import { User } from 'firebase/auth';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile-page',
@@ -15,7 +13,6 @@ import { Router } from '@angular/router';
 export class ProfilePageComponent implements OnInit{
   authService = inject(AuthService);
   private fb = inject(FormBuilder);
-  private router = inject(Router);
 
   fu = FormUtils;
 
@@ -48,7 +45,6 @@ export class ProfilePageComponent implements OnInit{
     this.showDialog.set(false);
     console.log('✅ Cuenta eliminada');
     this.authService.deleteCurrentUser();
-    this.router.navigateByUrl('/');
 
   }
 
